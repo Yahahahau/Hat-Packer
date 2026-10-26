@@ -1,0 +1,32 @@
+# Netlify build settings for Hat Packer / FNF-Spritesheet-XML-generator-Web.
+# The app lives in svelte-frontend/ (Svelte + Rollup + Rust/WebAssembly).
+# `npm run build` (rollup -c) writes bundle.js, bundle.css and the .wasm into
+# svelte-frontend/public/build/; index.html, global.css and fonts/ already live in
+# svelte-frontend/public/, so svelte-frontend/public is the directory to publish.
+#
+# Build time: compiling the Rust crate (~96 packages) is what takes minutes. Everything Rust-related is
+# therefore kept under /opt/build/cache, the folder Netlify saves and restores between builds:
+#   - the Rust toolchain (rustup + cargo)            -> CARGO_HOME / RUSTUP_HOME
+#   - compiled dependencies and incremental output   -> CARGO_TARGET_DIR (the rollup Rust plugin asks
+#                                                       `cargo metadata` for it, so it follows this setting)
+#   - the wasm-bindgen CLI the plugin downloads      -> XDG_CACHE_HOME
+# The first build on a site (or after "Clear cache and deploy site") is still slow; later builds reuse it.
+[build]
+  base    = "svelte-frontend"
+  publish = "public"
+  command = """
+    if [ ! -x "$CARGO_HOME/bin/cargo" ]; then
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --target wasm32-unknown-unknown
+    fi
+    . "$CARGO_HOME/env"
+    rustup target add wasm32-unknown-unknown
+    npm install
+    npm run build
+  """
+
+[build.environment]
+  NODE_VERSION    = "20"
+  CARGO_HOME      = "/opt/build/cache/rust/cargo"
+  RUSTUP_HOME     = "/opt/build/cache/rust/rustup"
+  CARGO_TARGET_DIR = "/opt/build/cache/rust/target"
+  XDG_CACHE_HOME  = "/opt/build/cache/rust/xdg"

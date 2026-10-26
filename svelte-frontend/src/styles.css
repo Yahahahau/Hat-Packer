@@ -1,0 +1,312 @@
+/* ---------- Design tokens ---------- */
+:root {
+    --bg: #0e1015;
+    --surface: #161a22;
+    --surface-2: #1d222c;
+    --surface-3: #262c38;
+    --border: #2f3644;
+    --border-strong: #46506a;
+
+    --text: #e8ebf2;
+    --text-muted: #9ba5b8;
+
+    --accent: #7b9bff;
+    --accent-hover: #93adff;
+    --accent-soft: rgba(123, 155, 255, 0.16);
+    --accent-contrast: #0a1028;
+
+    --danger: #ff7b8a;
+    --danger-soft: rgba(255, 123, 138, 0.15);
+    --success: #5fd39b;
+
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --checker-a: #1a1e27;
+    --checker-b: #212631;
+
+    /* two font roles: UI = custom display font (titles, labels, buttons); read = system font (text, inputs, tables, XML) */
+    --font-ui: "PhantomMuff", "Noto Sans Thai", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-read: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Noto Sans Thai", "Helvetica Neue", Arial, sans-serif;
+
+    /* chunky 3D buttons */
+    --btn-depth: 4px;          /* height of the solid bottom edge */
+    --btn-press: 3px;          /* how far a button sinks while pressed (edge shrinks by the same amount) */
+    --btn-face: #2b3342;
+    --btn-face-hover: #343d4f;
+    --btn-edge: #0b0e14;
+    --btn-text: var(--text);
+    --btn-primary-edge: #3f5bb8;
+    --btn-danger-face: #3a2530;
+    --btn-danger-edge: #12080c;
+
+    --radius: 10px;
+    --radius-sm: 7px;
+    --tap: 34px; /* compact size for mouse; touch devices get 44px below */
+
+    color-scheme: dark;
+}
+
+:root.light-mode, .light-mode {
+    --bg: #eef1f7;
+    --surface: #ffffff;
+    --surface-2: #f4f6fb;
+    --surface-3: #e6eaf3;
+    --border: #d3d9e6;
+    --border-strong: #9aa6c0;
+
+    --text: #1a2030;
+    --text-muted: #556078;
+
+    --accent: #2c59cf;
+    --accent-hover: #2349ad;
+    --accent-soft: rgba(44, 89, 207, 0.12);
+    --accent-contrast: #ffffff;
+
+    --danger: #c2283a;
+    --danger-soft: rgba(194, 40, 58, 0.1);
+    --success: #17814f;
+
+    --shadow: 0 10px 30px rgba(30, 40, 70, 0.18);
+
+    --btn-face: #ffffff;
+    --btn-face-hover: #f3f6fd;
+    --btn-edge: #aab4cc;
+    --btn-primary-edge: #1a3b94;
+    --btn-danger-face: #fff0f2;
+    --btn-danger-edge: #d49aa3;
+    --checker-a: #f1f3f9;
+    --checker-b: #e4e8f1;
+
+    color-scheme: light;
+}
+
+html {
+    background-color: var(--bg);
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+/* ---------- Form controls ---------- */
+/* ---------- Buttons: chunky 3D ----------
+   The depth is a solid box-shadow under the button (no layout impact). Pressing moves the button
+   down with `transform` and shrinks the shadow by the same distance, so it looks like it sank
+   into the page. Only transform / box-shadow / colours are transitioned. */
+button,
+.chip,
+#theme-toggle {
+    min-height: var(--tap);
+    padding: 0 11px;
+    border: 2px solid var(--btn-edge);
+    border-radius: 10px;
+    background-color: var(--btn-face);
+    color: var(--btn-text);
+    font-family: var(--font-ui);
+    font-size: 0.88rem;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+    box-shadow:
+        0 var(--btn-depth) 0 var(--btn-edge),
+        inset 0 2px 0 rgba(255, 255, 255, 0.14);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+    transition:
+        transform 0.12s cubic-bezier(0.2, 0.8, 0.3, 1),
+        box-shadow 0.12s cubic-bezier(0.2, 0.8, 0.3, 1),
+        background-color 0.12s;
+}
+
+button:enabled:hover,
+.chip:hover,
+#theme-toggle:hover {
+    background-color: var(--btn-face-hover);
+}
+
+/* pressed: mouse down, touch, or key press */
+button:enabled:active,
+.chip:active,
+#theme-toggle:active {
+    transform: translateY(var(--btn-press));
+    box-shadow:
+        0 calc(var(--btn-depth) - var(--btn-press)) 0 var(--btn-edge),
+        inset 0 2px 0 rgba(255, 255, 255, 0.08);
+    transition-duration: 0.05s;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: 0 2px 0 var(--btn-edge);
+    transform: translateY(2px);
+}
+
+button:focus-visible,
+.chip:focus-within,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+tr:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    min-height: var(--tap);
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-2);
+    color: var(--text);
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: var(--accent);
+}
+
+input:disabled {
+    opacity: 0.5;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent);
+    flex: none;
+}
+
+progress {
+    width: 100%;
+    height: 10px;
+    accent-color: var(--accent);
+}
+
+fieldset {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--surface-2);
+    padding: 12px 14px;
+    margin: 0;
+}
+
+legend {
+    padding: 0 6px;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+code {
+    background-color: var(--surface-3);
+    padding: 1px 5px;
+    border-radius: 4px;
+}
+
+/* ---------- Shared bits ---------- */
+dialog {
+    color: var(--text);
+}
+
+dialog::backdrop {
+    background: rgba(5, 8, 14, 0.6);
+}
+
+.btn-primary,
+.modal-footer > button:first-child:not(:last-child) {
+    background-color: var(--accent);
+    border-color: var(--btn-primary-edge);
+    color: var(--accent-contrast);
+    box-shadow:
+        0 var(--btn-depth) 0 var(--btn-primary-edge),
+        inset 0 2px 0 rgba(255, 255, 255, 0.28);
+}
+
+.btn-primary:enabled:hover,
+.modal-footer > button:first-child:not(:last-child):enabled:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-primary:enabled:active,
+.modal-footer > button:first-child:not(:last-child):enabled:active {
+    box-shadow:
+        0 calc(var(--btn-depth) - var(--btn-press)) 0 var(--btn-primary-edge),
+        inset 0 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+.btn-primary:disabled,
+.modal-footer > button:first-child:not(:last-child):disabled {
+    box-shadow: 0 2px 0 var(--btn-primary-edge);
+}
+
+/* secondary controls that should stay flat: close icons, menu entries */
+button.btn-flat,
+button.btn-flat:enabled:hover,
+button.btn-flat:enabled:active,
+button.btn-flat:disabled,
+.drop-up-menu button,
+.drop-up-menu button:enabled:hover,
+.drop-up-menu button:enabled:active,
+.drop-up-menu button:disabled {
+    box-shadow: none;
+    transform: none;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+button.btn-flat:enabled:hover,
+.drop-up-menu button:enabled:hover,
+button.btn-flat:enabled:active,
+.drop-up-menu button:enabled:active {
+    background-color: var(--accent-soft);
+}
+
+/* destructive actions (delete) keep a red tint so they never look like a normal button */
+.btn-danger {
+    background-color: var(--btn-danger-face);
+    border-color: var(--btn-danger-edge);
+    color: var(--danger);
+    box-shadow:
+        0 var(--btn-depth) 0 var(--btn-danger-edge),
+        inset 0 2px 0 rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger:enabled:hover {
+    background-color: var(--danger-soft);
+}
+
+.btn-danger:enabled:active {
+    box-shadow:
+        0 calc(var(--btn-depth) - var(--btn-press)) 0 var(--btn-danger-edge),
+        inset 0 2px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* headings and form labels use the UI font; inputs, tables and descriptions stay readable */
+h1, h2, h3, h4, legend, .xmlview-input, .scale-field, .field > span, #character-name-control > label {
+    font-family: var(--font-ui);
+    letter-spacing: 0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    button,
+    .chip,
+    #theme-toggle {
+        transition: none;
+    }
+}
+
+
+/* touch devices (iPad / phones): keep full-size touch targets */
+@media (pointer: coarse) {
+    :root { --tap: 44px; }
+    button, .chip, #theme-toggle { font-size: 0.95rem; }
+}

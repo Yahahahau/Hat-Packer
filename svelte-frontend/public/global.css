@@ -1,0 +1,57 @@
+/* Hat Packer - base layout.
+   Colours/tokens live in src/styles.css; this file only holds resets and the app shell. */
+/* Custom UI font: used for titles, labels and buttons. Readable text keeps the system font. */
+@font-face {
+	font-family: "PhantomMuff";
+	src: url("fonts/PhantomMuff.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
+body {
+	font-family: var(--font-read);
+	font-size: 16px;
+	line-height: 1.4;
+	-webkit-tap-highlight-color: transparent;
+}
+
+a {
+	color: var(--accent);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+label {
+	display: block;
+}
+
+input, select, textarea {
+	font-family: var(--font-read);
+	font-size: inherit;
+	margin: 0;
+}
+
+button {
+	font-family: var(--font-ui);
+	touch-action: manipulation;
+}
