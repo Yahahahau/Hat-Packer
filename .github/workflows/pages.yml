@@ -41,9 +41,6 @@ jobs:
           npm run build
       - name: Check build output
         run: ls -R svelte-frontend/public/build && test -f svelte-frontend/public/index.html
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: svelte-frontend/public
