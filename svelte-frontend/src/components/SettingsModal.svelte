@@ -1,6 +1,7 @@
 <script lang="ts">
     import Modal from "./Modal.svelte";
     import { soundEnabled, playUiSound } from '../sounds';
+    import { deviceChoice } from '../device';
 
     export let showView = false;
 
@@ -51,6 +52,16 @@
                 <code>frameX/frameY</code> = where the trimmed area sits (negative offset), <code>frameWidth/frameHeight</code> = original image size.
                 Images are trimmed once only. The mode applies to images added afterwards; frames that are already in the list keep how they were added.
             </p>
+        </fieldset>
+        <fieldset>
+            <legend>
+                Device layout
+            </legend>
+            <label for="dev-auto"><input type="radio" name="device" id="dev-auto" value="auto" bind:group={$deviceChoice}> Automatic (match my screen)</label>
+            <label for="dev-phone"><input type="radio" name="device" id="dev-phone" value="phone" bind:group={$deviceChoice}> Phone</label>
+            <label for="dev-tablet"><input type="radio" name="device" id="dev-tablet" value="tablet" bind:group={$deviceChoice}> Tablet</label>
+            <label for="dev-desktop"><input type="radio" name="device" id="dev-desktop" value="desktop" bind:group={$deviceChoice}> Desktop</label>
+            <p class="hint">Only changes spacing and button size. All tools stay available and your project is not touched. The panel arrangement follows the real window width.</p>
         </fieldset>
         <fieldset>
             <legend>

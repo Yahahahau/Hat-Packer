@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { APP_NAME, APP_SUBTITLE, LOGO_URL } from './branding';
+	import { deviceChoice } from './device';
+	import Welcome from './components/Welcome.svelte';
     import AppTab from "./components/AppTab.svelte";
     import Icon from "./components/Icon.svelte";
     import IcongridGenerator from "./tabs/IcongridGenerator.svelte";
@@ -23,6 +25,9 @@
 	// let test = wasm.greet("Friend!!");
 </script>
 
+{#if $deviceChoice === null}
+<Welcome />
+{:else}
 <main id="app-shell">
 	<header id="app-header">
 		<div id="brand">
@@ -54,14 +59,15 @@
 
 	<!-- both modes stay mounted so switching tabs never discards what the user already added -->
 	<div id="tab-container">
-		<div class="pane" hidden={curChoice !== "spsh"}>
+		<div class="pane pane-spsh" hidden={curChoice !== "spsh"}>
 			<SpritesheetGenerator charname={characterName} wasm={wasm} />
 		</div>
-		<div class="pane" hidden={curChoice !== "icongrid"}>
+		<div class="pane pane-icon" hidden={curChoice !== "icongrid"}>
 			<IcongridGenerator bind:charname={characterName} wasm={wasm} />
 		</div>
 	</div>
 </main>
+{/if}
 
 <style>
 	#app-shell {
@@ -70,11 +76,12 @@
 		height: 100vh;
 		height: 100dvh;
 		min-height: 520px;
-		padding: 6px 10px 8px;
-		padding-left: max(12px, env(safe-area-inset-left));
-		padding-right: max(12px, env(safe-area-inset-right));
-		padding-bottom: max(12px, env(safe-area-inset-bottom));
-		gap: 6px;
+		padding: var(--pad) var(--pad-x) var(--pad);
+		padding-left: max(var(--pad-x), env(safe-area-inset-left));
+		padding-right: max(var(--pad-x), env(safe-area-inset-right));
+		padding-top: max(var(--pad), env(safe-area-inset-top));
+		padding-bottom: max(var(--pad), env(safe-area-inset-bottom));
+		gap: var(--gap);
 	}
 
 	#app-header {

@@ -70,14 +70,14 @@
 		background-color: var(--surface);
 		color: var(--text);
 		box-shadow: var(--shadow);
-		width: min(480px, calc(100vw - 20px));
+		width: min(var(--modal-w), calc(100vw - 2 * var(--modal-gutter)));
 		max-width: none;
-		max-height: calc(100dvh - 20px);
+		max-height: calc(100dvh - 2 * var(--modal-gutter));
 		overflow: hidden;
 	}
 	dialog.lg {
-		width: min(1180px, calc(100vw - 20px));
-		height: min(820px, calc(100dvh - 20px));
+		width: min(var(--modal-lg-w), calc(100vw - 2 * var(--modal-gutter)));
+		height: min(var(--modal-lg-h), calc(100dvh - 2 * var(--modal-gutter)));
 	}
 	dialog[open] {
 		display: flex;

@@ -90,7 +90,7 @@
         overscroll-behavior: contain;
         -webkit-overflow-scrolling: touch;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(var(--frame-min), 1fr));
         grid-auto-rows: max-content;
         align-content: start;
         gap: 8px;

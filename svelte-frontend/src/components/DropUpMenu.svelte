@@ -58,6 +58,7 @@
         <div
             bind:this={menuDiv}
             role="menu"
+            on:click|capture={() => { menuShown = false; }}
             class="drop-up-menu {direction} {align}"
             in:fadeNSlide="{{ duration: 170 }}"
             out:fadeNSlide="{{ duration: 130 }}"

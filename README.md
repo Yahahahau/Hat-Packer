@@ -113,3 +113,11 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 - Each frame card shows its size: `62 x 46 px - from 101 x 83` (trimmed vs. original). The XML Inspector shows width/height, frameX/frameY and frameWidth/frameHeight separately.
 - Soft blue background (static gradients).
 - Button click sounds (`svelte-frontend/public/assets/sounds/ui/`, wired in `src/sounds.ts`); can be turned off in Settings.
+
+## v1.5.0 - Device selection & responsive layout
+- **Welcome page** on first visit: pick Phone, Tablet or Desktop (or "match my screen automatically"). The choice is remembered in `localStorage` and can be changed any time in Settings > Device layout. If storage is unavailable the app still works (automatic layout).
+- The device choice only affects density (spacing, button size). It never hides a tool and never touches your frames, animation data or XML.
+- **Layout follows the real window width** (`src/device.ts`): phone < 640 px, tablet 640-1023 px, desktop >= 1024 px (tool panel on the left, frames/preview on the right). Layout tokens (padding, gaps, panel width, modal sizes) live in `src/styles.css`.
+- Modals use the layout tokens: full-width on phones, scroll inside, never overflow the screen.
+- Welcome page uses staggered intro animations (respects `prefers-reduced-motion`).
+- Dropdown menus now close after choosing an entry.

@@ -42,6 +42,18 @@
     --btn-danger-face: #3a2530;
     --btn-danger-edge: #12080c;
 
+    /* layout tokens (overridden per breakpoint / device below) */
+    --pad: 6px;            /* outer padding */
+    --pad-x: 10px;
+    --gap: 6px;
+    --gap-lg: 16px;
+    --panel-w: 300px;      /* desktop tool panel width */
+    --frame-min: 128px;    /* min width of a frame card column */
+    --modal-w: 480px;
+    --modal-lg-w: 1180px;
+    --modal-lg-h: 820px;
+    --modal-gutter: 10px;
+
     --radius: 10px;
     --radius-sm: 7px;
     --tap: 34px; /* compact size for mouse; touch devices get 44px below */
@@ -329,3 +341,79 @@ h1, h2, h3, h4, legend, .xmlview-input, .scale-field, .field > span, #character-
         transition-duration: 0.01ms !important;
     }
 }
+
+
+/* =====================================================================
+   Layout tokens per breakpoint. data-layout (from the real window width) is set in src/device.ts:
+   phone < 640px, tablet 640-1023px, desktop >= 1024px.
+   ===================================================================== */
+html[data-layout="phone"] {
+    --pad: 6px; --pad-x: 6px; --gap: 6px; --gap-lg: 10px;
+    --frame-min: 104px;
+    --modal-w: 100vw; --modal-lg-w: 100vw; --modal-lg-h: 100dvh; --modal-gutter: 4px;
+}
+html[data-layout="tablet"] {
+    --pad: 8px; --pad-x: 12px; --gap: 8px; --gap-lg: 16px;
+    --frame-min: 128px;
+    --modal-w: 520px; --modal-lg-w: 960px; --modal-lg-h: 760px; --modal-gutter: 12px;
+}
+html[data-layout="desktop"] {
+    --pad: 8px; --pad-x: 14px; --gap: 10px; --gap-lg: 20px;
+    --frame-min: 136px;
+    --panel-w: 300px;
+    --modal-w: 520px; --modal-lg-w: 1180px; --modal-lg-h: 820px; --modal-gutter: 16px;
+}
+@media (min-width: 1600px) {
+    html[data-layout="desktop"] { --panel-w: 340px; --frame-min: 150px; }
+}
+
+/* Device preference = density only (never hides a tool). Touch-first choices keep 44px targets. */
+html[data-device="phone"], html[data-device="tablet"] { --tap: 44px; }
+@media (pointer: fine) {
+    html[data-device="desktop"] { --tap: 34px; }
+}
+html[data-layout="phone"] { --tap: 44px; }
+
+/* very short windows (e.g. phone in landscape): trim vertical space */
+@media (max-height: 520px) {
+    :root { --pad: 4px; --gap: 4px; }
+}
+
+/* ---------- Desktop: tool panel on the left, frames / preview on the right ---------- */
+html[data-layout="desktop"] #tab-container .pane-spsh:not([hidden]) {
+    display: grid;
+    grid-template-columns: var(--panel-w) minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto minmax(0, 1fr);
+    column-gap: var(--gap);
+    row-gap: var(--gap);
+    align-items: start;
+}
+html[data-layout="desktop"] .pane-spsh #controls-top { grid-column: 1; grid-row: 1; order: 0; }
+html[data-layout="desktop"] .pane-spsh #range-hint   { grid-column: 1; grid-row: 2; }
+html[data-layout="desktop"] .pane-spsh #controls     { grid-column: 1; grid-row: 3; }
+html[data-layout="desktop"] .pane-spsh #status-line  { grid-column: 1; grid-row: 4; }
+html[data-layout="desktop"] .pane-spsh #sprite-frames { grid-column: 2; grid-row: 1 / -1; align-self: stretch; min-height: 0; }
+
+/* the toolbars become vertical panels */
+html[data-layout="desktop"] .pane-spsh .bar,
+html[data-layout="desktop"] .pane-spsh .bar .group {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+html[data-layout="desktop"] .pane-spsh .bar .counts { text-align: left; order: 0; flex: none; }
+html[data-layout="desktop"] .pane-spsh .bar .group > button,
+html[data-layout="desktop"] .pane-spsh .bar .group > label,
+html[data-layout="desktop"] .pane-spsh .bar .dropup,
+html[data-layout="desktop"] .pane-spsh .bar .dropup > button {
+    width: 100%;
+    justify-content: flex-start;
+}
+html[data-layout="desktop"] .pane-spsh .bar .dropup > button { justify-content: flex-start; }
+html[data-layout="desktop"] .pane-spsh #controls-top .group { margin-bottom: var(--btn-depth); }
+/* bottom panel keeps the main export action last */
+html[data-layout="desktop"] .pane-spsh .drop-up-menu { min-width: 100%; }
+
+/* ---------- Phone: tighter chrome, big finger targets ---------- */
+html[data-layout="phone"] .bar { padding: 6px; }
+html[data-layout="phone"] #app-header { gap: 4px 8px; }

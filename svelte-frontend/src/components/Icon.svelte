@@ -34,6 +34,9 @@
         'chevrons-right': '<path d="m13 17 5-5-5-5M6 17l5-5-5-5"/>',
         'sort': '<path d="M4 6h10M4 12h7M4 18h4M17 5v14m0 0-3-3m3 3 3-3"/>',
         'archive': '<rect x="3" y="3" width="18" height="5" rx="1"/><path d="M5 8v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8M10 12h4"/>',
+        'phone': '<rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/>',
+        'tablet': '<rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M11 18h2"/>',
+        'desktop': '<rect x="2.5" y="4" width="19" height="12.5" rx="2"/><path d="M8 21h8M12 16.5V21"/>',
         'alert': '<path d="M12 3 2 20h20L12 3z"/><path d="M12 10v5M12 18v.01"/>',
     };
 </script>

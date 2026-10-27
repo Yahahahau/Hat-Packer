@@ -165,7 +165,7 @@
         </canvas>
     </div>
     <p class="frame-name">{frameInfo.animationPrefix}</p>
-    <p class="frame-size" title="Packed size{wasTrimmed ? ' (after trim) / original size' : ''}">{shownW} &times; {shownH} px{#if wasTrimmed}<span class="frame-orig"> &middot; from {frameInfo.frameRect.frameWidth} &times; {frameInfo.frameRect.frameHeight}</span>{/if}</p>
+    <p class="frame-size" title="Packed size{wasTrimmed ? ' (after trim) / original size' : ''}">{shownW} &times; {shownH} px{#if wasTrimmed}<span class="frame-orig">from {frameInfo.frameRect.frameWidth} &times; {frameInfo.frameRect.frameHeight}</span>{/if}</p>
 </div>
 
 <style>
@@ -252,9 +252,11 @@
         font-size: 0.72rem;
         color: var(--text-muted);
         text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        line-height: 1.25;
+    }
+
+    .frame-orig {
+        display: block;
     }
 
     .frame-name {
