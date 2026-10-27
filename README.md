@@ -121,3 +121,6 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 - Modals use the layout tokens: full-width on phones, scroll inside, never overflow the screen.
 - Welcome page uses staggered intro animations (respects `prefers-reduced-motion`).
 - Dropdown menus now close after choosing an entry.
+
+### v1.5.1
+- Phone layout reworked: compact header, icon-over-label toolbar buttons, one wide Generate button, menus as a bottom sheet, frame cards that scale to the column width.

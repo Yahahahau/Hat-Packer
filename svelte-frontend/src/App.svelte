@@ -39,8 +39,8 @@
 		</div>
 
 		<div id="app-tabs" role="tablist" aria-label="Mode">
-			<AppTab id="spsh" icon="sheet" bind:curChoice={curChoice} text="Spritesheet Generation" />
-			<AppTab id="icongrid" icon="grid" bind:curChoice={curChoice} text="Icongrid Generation" />
+			<AppTab id="spsh" icon="sheet" bind:curChoice={curChoice} text="Spritesheet Generation" shortText="Spritesheet" />
+			<AppTab id="icongrid" icon="grid" bind:curChoice={curChoice} text="Icongrid Generation" shortText="Icongrid" />
 		</div>
 
 		<div id="header-tools">

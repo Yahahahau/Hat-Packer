@@ -158,7 +158,7 @@
     <button type="button" class="frame-delete btn-danger" title="Delete frame" aria-label="Delete frame" on:click|stopPropagation={()=>{ onDelete(frameInfo) }}>
         <Icon name="trash" size={16} />
     </button>
-    <div class="frame-preview" style="width: {spriteframesize}px; height: {spriteframesize}px;">
+    <div class="frame-preview" style="width: 100%; max-width: {spriteframesize}px; aspect-ratio: 1 / 1;">
         <canvas style="display: {(showImage) ? 'block' : 'none'};" width="{spriteframesize}px" height="{spriteframesize}px" bind:this={frameCanvas}>
             Rendering Error!
             Please use a browser that supports canvas rendering! (like Chrome or Firefox)

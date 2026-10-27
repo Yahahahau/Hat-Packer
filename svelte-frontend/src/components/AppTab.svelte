@@ -5,6 +5,7 @@
     export let curChoice: string;
     export let text: string;
     export let icon = '';
+    export let shortText = text; // shown on phones
 </script>
 
 <button
@@ -16,7 +17,8 @@
     on:click={() => { curChoice = id; }}
 >
     {#if icon}<Icon name={icon} size={18} />{/if}
-    <span>{text}</span>
+    <span class="t-full">{text}</span>
+    <span class="t-short">{shortText}</span>
 </button>
 
 <style>
@@ -36,6 +38,8 @@
         text-overflow: ellipsis;
     }
 
+    .t-short { display: none; }
+
     /* phones: tabs share the row and shorten instead of pushing the page wider */
     @media screen and (max-width: 560px) {
         .app-tab {
@@ -44,6 +48,8 @@
             padding: 0 6px;
             font-size: 0.8rem;
         }
+        .t-full { display: none; }
+        .t-short { display: inline; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
     }
 
     /* the active mode is the accent button that stays pressed in */

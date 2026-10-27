@@ -414,6 +414,96 @@ html[data-layout="desktop"] .pane-spsh #controls-top .group { margin-bottom: var
 /* bottom panel keeps the main export action last */
 html[data-layout="desktop"] .pane-spsh .drop-up-menu { min-width: 100%; }
 
-/* ---------- Phone: tighter chrome, big finger targets ---------- */
-html[data-layout="phone"] .bar { padding: 6px; }
-html[data-layout="phone"] #app-header { gap: 4px 8px; }
+/* ---------- Phone: compact, thumb-friendly layout ----------
+   header: logo + name + theme switch / character name / tabs
+   top bar: 5 equal icon-over-label buttons; bottom bar: 4 icon buttons + one wide Generate button */
+html[data-layout="phone"] {
+    --tap: 40px;
+    --btn-depth: 3px;
+    --btn-press: 2px;
+}
+html[data-layout="phone"] #app-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+    align-items: center;
+}
+html[data-layout="phone"] #brand-logo { height: 26px; }
+html[data-layout="phone"] #title { font-size: 1rem; }
+html[data-layout="phone"] #header-tools { display: contents; }
+html[data-layout="phone"] #theme-toggle { grid-column: 2; grid-row: 1; margin: 0 0 var(--btn-depth); padding: 0 10px; }
+html[data-layout="phone"] #character-name-control { grid-column: 1 / -1; grid-row: 2; }
+html[data-layout="phone"] #character-name-control #char-name { width: 100%; min-height: 36px; }
+html[data-layout="phone"] #app-tabs { grid-column: 1 / -1; grid-row: 3; padding-bottom: var(--btn-depth); max-width: none; }
+html[data-layout="phone"] .app-tab { min-height: 38px; }
+
+html[data-layout="phone"] .pane-spsh .bar {
+    display: grid;
+    gap: 6px;
+    padding: 6px;
+    align-items: stretch;
+}
+html[data-layout="phone"] .pane-spsh .bar .group { display: contents; }
+html[data-layout="phone"] .pane-spsh #controls-top { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+html[data-layout="phone"] .pane-spsh #controls     { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+html[data-layout="phone"] .pane-spsh .bar .counts {
+    order: 20;
+    grid-column: 1 / -1;
+    text-align: left;
+    font-size: 0.8rem;
+    padding: 0 2px;
+}
+
+/* icon above a short label */
+html[data-layout="phone"] .pane-spsh .bar .group > button,
+html[data-layout="phone"] .pane-spsh .bar .group > label,
+html[data-layout="phone"] .pane-spsh .bar .dropup > button {
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    width: 100%;
+    min-height: 50px;
+    padding: 4px 2px;
+    font-size: 0.7rem;
+    line-height: 1.1;
+    white-space: normal;
+    text-align: center;
+    margin-bottom: var(--btn-depth);
+}
+html[data-layout="phone"] .pane-spsh .bar .dropup { width: 100%; display: flex; }
+/* the chevron next to Selection / Order / View is redundant on phones */
+html[data-layout="phone"] .pane-spsh .bar .dropup > button > svg:last-child { display: none; }
+html[data-layout="phone"] .pane-spsh .bar .chip input { margin: 0; }
+
+/* Generate: one wide primary button */
+html[data-layout="phone"] .pane-spsh #controls .group:last-child { display: block; grid-column: 1 / -1; order: 10; }
+html[data-layout="phone"] .pane-spsh #controls .group:last-child .dropup > button {
+    flex-direction: row;
+    min-height: 44px;
+    font-size: 0.95rem;
+    gap: 8px;
+}
+html[data-layout="phone"] .pane-spsh #controls .group:last-child .dropup > button > svg:last-child { display: inline-block; }
+
+/* menus become a bottom sheet: always fully on screen, big targets */
+html[data-layout="phone"] .pane-spsh .drop-up-menu {
+    position: fixed;
+    left: 8px !important;
+    right: 8px !important;
+    top: auto !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    z-index: 60;
+    min-width: 0;
+    max-width: none;
+    max-height: 60dvh;
+    padding: 6px;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
+}
+html[data-layout="phone"] .pane-spsh .drop-up-menu button { min-height: 46px; font-size: 0.95rem; }
+
+/* frames get the room */
+html[data-layout="phone"] #sprite-frames { min-height: 180px; padding: 6px; gap: 6px; }
+html[data-layout="phone"] #empty-state { padding: 20px 12px; }
+html[data-layout="phone"] #empty-state svg { width: 30px; height: 30px; }
+html[data-layout="phone"] #empty-state p { font-size: 0.85rem; }
+html[data-layout="phone"] #status-line { font-size: 0.8rem; padding: 4px 4px 4px 8px; }
