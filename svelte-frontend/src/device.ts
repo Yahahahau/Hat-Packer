@@ -7,13 +7,25 @@ export type LayoutClass = 'phone' | 'tablet' | 'desktop';
 const KEY = 'hatpacker.device';
 const VALID: DeviceChoice[] = ['phone', 'tablet', 'desktop', 'auto'];
 
-function read(): DeviceChoice | null {
+// The choice is saved in localStorage AND in a long-lived cookie, so it still survives on browsers
+// where one of the two is blocked or cleared separately (some in-app / privacy browsers).
+function fromStore(): string | null {
+    try { return localStorage.getItem(KEY); } catch (e) { return null; }
+}
+function fromCookie(): string | null {
     try {
-        const v = localStorage.getItem(KEY) as DeviceChoice | null;
-        return v && VALID.includes(v) ? v : null;
-    } catch (e) {
-        return null; // storage blocked: the Welcome page is shown and the choice just lives in memory
-    }
+        const m = document.cookie.match(new RegExp('(?:^|; )' + KEY.replace('.', '\\.') + '=([^;]*)'));
+        return m ? decodeURIComponent(m[1]) : null;
+    } catch (e) { return null; }
+}
+function save(v: string) {
+    try { localStorage.setItem(KEY, v); } catch (e) { /* optional */ }
+    try { document.cookie = `${KEY}=${encodeURIComponent(v)}; max-age=31536000; path=/; SameSite=Lax`; } catch (e) { /* optional */ }
+}
+
+function read(): DeviceChoice | null {
+    const v = (fromStore() ?? fromCookie()) as DeviceChoice | null;
+    return v && VALID.includes(v) ? v : null;
 }
 
 // null = nothing chosen yet (show Welcome)
@@ -42,8 +54,6 @@ export function initLayout() {
     window.addEventListener('orientationchange', apply);
     deviceChoice.subscribe((v) => {
         root.dataset.device = v ?? 'auto';
-        if(v !== null) {
-            try { localStorage.setItem(KEY, v); } catch (e) { /* optional */ }
-        }
+        if(v !== null) save(v);
     });
 }

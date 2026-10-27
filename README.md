@@ -124,3 +124,6 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 
 ### v1.5.1
 - Phone layout reworked: compact header, icon-over-label toolbar buttons, one wide Generate button, menus as a bottom sheet, frame cards that scale to the column width.
+
+### v1.5.2
+- Device choice is also saved in a cookie (fallback when localStorage is blocked), so the Welcome page is not shown again on later visits.
