@@ -4,6 +4,8 @@
     import { AnimationController } from '../animationcontroller';
     import { spriteframes, spritesheet_map } from '../stores';
     import Icon from './Icon.svelte';
+    import { tick } from 'svelte';
+    import { playCheck } from '../animcheck';
     let frameCanvas: HTMLCanvasElement;
     let frameDiv: HTMLDivElement;
     export let frameInfo: SpriteFrameData;
@@ -12,6 +14,15 @@
 
     let spriteframesize = 120;
     let showImage = false;
+
+    // the card toggles the checkbox from code (no 'change' event), so play its animation here
+    let checkEl: HTMLInputElement;
+    let prevSelected: boolean | null = null;
+    $: if(frameInfo.selected !== prevSelected) {
+        const first = prevSelected === null;
+        prevSelected = frameInfo.selected;
+        if(!first) tick().then(() => playCheck(checkEl));
+    }
 
     // visible (trimmed) size = the rect that gets packed; original = frameWidth/frameHeight
     $: shownW = frameInfo.rect.width;
@@ -154,7 +165,7 @@
     aria-pressed={frameInfo.selected}
     title={frameInfo.animationPrefix}
 >
-    <input class="frame-check" type="checkbox" name="selected-chkbox" id="selected-chkbox" checked={frameInfo.selected} tabindex="-1" />
+    <input bind:this={checkEl} class="frame-check" type="checkbox" name="selected-chkbox" id="selected-chkbox" checked={frameInfo.selected} tabindex="-1" />
     <button type="button" class="frame-delete btn-danger" title="Delete frame" aria-label="Delete frame" on:click|stopPropagation={()=>{ onDelete(frameInfo) }}>
         <Icon name="trash" size={16} />
     </button>
@@ -223,8 +234,7 @@
         top: 9px;
         left: 10px;
         z-index: 1;
-        width: 22px;
-        height: 22px;
+        --ck: 22px;
         margin: 0;
         pointer-events: none;
     }

@@ -127,3 +127,7 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 
 ### v1.5.2
 - Device choice is also saved in a cookie (fallback when localStorage is blocked), so the Welcome page is not shown again on later visits.
+
+## v1.6.0 - Animated checkboxes
+- All checkboxes use the supplied on/off animation (turn-on frames + turn-off frames). White off-box in dark mode, black off-box in light mode. Respects `prefers-reduced-motion`.
+- Sprite strips: `svelte-frontend/public/assets/icons/checkbox/`; the original atlas (PNG + XML) is kept in `svelte-frontend/assets-src/checkbox/`. Logic: `src/animcheck.ts` + CSS at the end of `public/global.css`.

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="button .png">
+	<!-- Created using Hat Packer -->
+	<!-- Based on FNF-Spritesheet-XML-generator-Web by UncertainProd (MIT) -->
+	<SubTexture name="Turn off idle0000" x="0" y="1324" width="414" height="400" frameX="-49" frameY="-56" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0000" x="917" y="0" width="442" height="428" frameX="-35" frameY="-42" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0001" x="917" y="0" width="442" height="428" frameX="-35" frameY="-42" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0002" x="828" y="1324" width="410" height="368" frameX="-65" frameY="-72" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0003" x="828" y="1324" width="410" height="368" frameX="-65" frameY="-72" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0004" x="0" y="0" width="449" height="460" frameX="-45" frameY="0" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0005" x="0" y="0" width="449" height="460" frameX="-45" frameY="0" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0006" x="0" y="460" width="446" height="437" frameX="-49" frameY="-19" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0007" x="0" y="460" width="446" height="437" frameX="-49" frameY="-19" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0008" x="443" y="897" width="463" height="400" frameX="-49" frameY="-56" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0009" x="443" y="897" width="463" height="400" frameX="-49" frameY="-56" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0010" x="0" y="897" width="443" height="427" frameX="-49" frameY="-29" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0011" x="0" y="897" width="443" height="427" frameX="-49" frameY="-29" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0012" x="1359" y="0" width="446" height="415" frameX="-49" frameY="-41" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0013" x="1359" y="0" width="446" height="415" frameX="-49" frameY="-41" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0014" x="1359" y="0" width="446" height="415" frameX="-49" frameY="-41" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0015" x="1359" y="0" width="446" height="415" frameX="-49" frameY="-41" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0016" x="1359" y="0" width="446" height="415" frameX="-49" frameY="-41" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn on transition0017" x="1359" y="0" width="446" height="415" frameX="-49" frameY="-41" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0000" x="449" y="0" width="468" height="435" frameX="-46" frameY="-24" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0001" x="449" y="0" width="468" height="435" frameX="-46" frameY="-24" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0002" x="1359" y="415" width="441" height="416" frameX="-41" frameY="-48" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0003" x="1359" y="415" width="441" height="416" frameX="-41" frameY="-48" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0004" x="1238" y="1324" width="378" height="366" frameX="-67" frameY="-73" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0005" x="1238" y="1324" width="378" height="366" frameX="-67" frameY="-73" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0006" x="1805" y="335" width="346" height="335" frameX="-83" frameY="-89" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0007" x="1805" y="335" width="346" height="335" frameX="-83" frameY="-89" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0008" x="1359" y="831" width="428" height="414" frameX="-42" frameY="-49" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0009" x="1359" y="831" width="428" height="414" frameX="-42" frameY="-49" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0010" x="0" y="1324" width="414" height="400" frameX="-49" frameY="-56" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (White)0011" x="0" y="1324" width="414" height="400" frameX="-49" frameY="-56" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off idle (black)0000" x="414" y="1324" width="414" height="400" frameX="-49" frameY="-56" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0000" x="1359" y="0" width="446" height="415" frameX="-49" frameY="-41" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0001" x="1359" y="0" width="446" height="415" frameX="-49" frameY="-41" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0002" x="446" y="460" width="451" height="420" frameX="-49" frameY="-36" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0003" x="446" y="460" width="451" height="420" frameX="-49" frameY="-36" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0004" x="449" y="0" width="468" height="435" frameX="-46" frameY="-24" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0005" x="449" y="0" width="468" height="435" frameX="-46" frameY="-24" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0006" x="1359" y="415" width="441" height="416" frameX="-41" frameY="-48" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0007" x="1359" y="415" width="441" height="416" frameX="-41" frameY="-48" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0008" x="1238" y="1324" width="378" height="366" frameX="-67" frameY="-73" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0009" x="1238" y="1324" width="378" height="366" frameX="-67" frameY="-73" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0010" x="1805" y="0" width="346" height="335" frameX="-83" frameY="-89" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0011" x="1805" y="0" width="346" height="335" frameX="-83" frameY="-89" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0012" x="917" y="428" width="428" height="414" frameX="-42" frameY="-49" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0013" x="917" y="428" width="428" height="414" frameX="-42" frameY="-49" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0014" x="906" y="897" width="414" height="400" frameX="-49" frameY="-56" frameWidth="512" frameHeight="512"/>
+	<SubTexture name="Turn off transition (black)0015" x="906" y="897" width="414" height="400" frameX="-49" frameY="-56" frameWidth="512" frameHeight="512"/>
+</TextureAtlas>

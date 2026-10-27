@@ -55,3 +55,70 @@ button {
 	font-family: var(--font-ui);
 	touch-action: manipulation;
 }
+
+
+/* ---------- Animated checkbox (sprite strip made from assets-src/checkbox/checkbox-atlas.*) ----------
+   strip = 18 "turn on" frames, then the "turn off" frames. Resting states: checked = cell --ck-on,
+   unchecked = last cell (--ck-off). On change, src/animcheck.ts adds .ck-play-on / .ck-play-off for one run.
+   White box in dark mode, black box in light mode. */
+:root {
+	--ck: 24px;
+	--ck-n: 30;          /* cells in the strip */
+	--ck-on: 17;         /* resting "checked" cell */
+	--ck-off: 29;        /* resting "unchecked" cell */
+	--ck-off-start: 18;  /* first cell of the turn-off animation */
+	--ck-off-steps: 11;  /* = --ck-off - --ck-off-start */
+	--ck-img: url("assets/icons/checkbox/strip-dark.png");
+}
+:root.light-mode, .light-mode {
+	--ck-n: 34;
+	--ck-off: 33;
+	--ck-off-steps: 15;
+	--ck-img: url("assets/icons/checkbox/strip-light.png");
+}
+
+html input[type="checkbox"] {
+	-webkit-appearance: none;
+	appearance: none;
+	flex: none;
+	width: var(--ck);
+	height: var(--ck);
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 6px;
+	background-color: transparent;
+	background-image: var(--ck-img);
+	background-repeat: no-repeat;
+	background-size: calc(var(--ck) * var(--ck-n)) var(--ck);
+	background-position: calc(var(--ck) * var(--ck-off) * -1) 0;
+	box-shadow: none;
+	cursor: pointer;
+}
+
+html input[type="checkbox"]:checked {
+	background-position: calc(var(--ck) * var(--ck-on) * -1) 0;
+}
+
+html input[type="checkbox"]:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+html input[type="checkbox"].ck-play-on {
+	animation: ck-on 0.55s steps(var(--ck-on)) forwards;
+}
+
+html input[type="checkbox"].ck-play-off {
+	animation: ck-off 0.45s steps(var(--ck-off-steps)) forwards;
+}
+
+@keyframes ck-on {
+	from { background-position: 0 0; }
+	to   { background-position: calc(var(--ck) * var(--ck-on) * -1) 0; }
+}
+
+@keyframes ck-off {
+	from { background-position: calc(var(--ck) * var(--ck-off-start) * -1) 0; }
+	to   { background-position: calc(var(--ck) * var(--ck-off) * -1) 0; }
+}
