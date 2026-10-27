@@ -1,5 +1,6 @@
 <script lang="ts">
     import Modal from "./Modal.svelte";
+    import { soundEnabled, playUiSound } from '../sounds';
 
     export let showView = false;
 
@@ -50,6 +51,15 @@
                 <code>frameX/frameY</code> = where the trimmed area sits (negative offset), <code>frameWidth/frameHeight</code> = original image size.
                 Images are trimmed once only. The mode applies to images added afterwards; frames that are already in the list keep how they were added.
             </p>
+        </fieldset>
+        <fieldset>
+            <legend>
+                Sound
+            </legend>
+            <label for="ui-sound">
+                <input type="checkbox" id="ui-sound" bind:checked={$soundEnabled} on:change={() => playUiSound('normal')}>
+                Button click sounds
+            </label>
         </fieldset>
         <fieldset>
             <legend>
@@ -109,7 +119,7 @@
     #modal-content {
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 10px;
     }
 
     fieldset {
@@ -123,7 +133,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        min-height: 36px;
+        min-height: 34px;
     }
 
     .hint {

@@ -31,8 +31,19 @@
     }
 
     .app-tab span {
+        min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    /* phones: tabs share the row and shorten instead of pushing the page wider */
+    @media screen and (max-width: 560px) {
+        .app-tab {
+            flex: 1 1 0;
+            gap: 5px;
+            padding: 0 6px;
+            font-size: 0.8rem;
+        }
     }
 
     /* the active mode is the accent button that stays pressed in */

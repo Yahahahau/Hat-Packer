@@ -1,9 +1,12 @@
 import App from './App.svelte';
 import wasm from '../../rust-img-lib/Cargo.toml';
 import './styles.css';
+import { initUiSounds } from './sounds';
 
 // iOS Safari only triggers :active (the pressed-button look) when some touch listener exists.
 document.addEventListener('touchstart', () => {}, { passive: true });
+
+initUiSounds();
 
 const init = async () => {
 	const helloWorldWasm = await wasm();

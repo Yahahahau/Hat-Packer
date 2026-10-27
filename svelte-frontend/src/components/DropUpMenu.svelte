@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { fade } from "svelte/transition";
-    import { quadInOut } from "svelte/easing";
+    import { cubicOut } from "svelte/easing";
     import Icon from "./Icon.svelte";
 
     let menuShown = false;
@@ -29,12 +28,15 @@
         }
     }
 
-    function fadeNSlide(node, options)
+    // fade + small slide (opacity/translate only, so the menu never changes size); none when reduced motion is on
+    function fadeNSlide(node: Element, options: { duration: number })
     {
-        const fadeAnim = fade(node, options);
+        const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const dy = direction === 'up' ? 8 : -8;
         return {
-            duration: options.duration,
-            css: fadeAnim.css
+            duration: reduced ? 0 : options.duration,
+            easing: cubicOut,
+            css: (t: number) => `opacity: ${t}; transform: translateY(${(1 - t) * dy}px); pointer-events: none;`
         };
     }
 </script>
@@ -57,8 +59,8 @@
             bind:this={menuDiv}
             role="menu"
             class="drop-up-menu {direction} {align}"
-            in:fadeNSlide="{{ duration: 100, easing: quadInOut }}"
-            out:fadeNSlide="{{ duration: 100, easing: quadInOut }}"
+            in:fadeNSlide="{{ duration: 170 }}"
+            out:fadeNSlide="{{ duration: 130 }}"
         >
             <slot />
         </div>
@@ -84,8 +86,10 @@
         display: flex;
         flex-direction: column;
         gap: 2px;
-        min-width: 230px;
-        padding: 6px;
+        min-width: 210px;
+        max-height: min(60dvh, 420px);
+        overflow-y: auto;
+        padding: 4px;
         background-color: var(--surface);
         border: 1px solid var(--border-strong);
         border-radius: var(--radius);

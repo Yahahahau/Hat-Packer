@@ -90,11 +90,11 @@
         overscroll-behavior: contain;
         -webkit-overflow-scrolling: touch;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
         grid-auto-rows: max-content;
         align-content: start;
-        gap: 10px;
-        padding: 12px;
+        gap: 8px;
+        padding: 8px;
         background-color: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--radius);

@@ -1,6 +1,10 @@
 /* ---------- Design tokens ---------- */
 :root {
-    --bg: #0e1015;
+    --bg: #0d1420;
+    /* static, very soft blue glows behind the UI (no animation, no extra cost) */
+    --bg-image:
+        radial-gradient(900px 520px at 12% -8%, rgba(96, 156, 255, 0.16), transparent 70%),
+        radial-gradient(800px 560px at 100% 105%, rgba(70, 140, 235, 0.12), transparent 70%);
     --surface: #161a22;
     --surface-2: #1d222c;
     --surface-3: #262c38;
@@ -46,7 +50,10 @@
 }
 
 :root.light-mode, .light-mode {
-    --bg: #eef1f7;
+    --bg: #e3eefb;
+    --bg-image:
+        radial-gradient(900px 520px at 12% -8%, rgba(120, 180, 255, 0.38), transparent 70%),
+        radial-gradient(800px 560px at 100% 105%, rgba(140, 195, 250, 0.32), transparent 70%);
     --surface: #ffffff;
     --surface-2: #f4f6fb;
     --surface-3: #e6eaf3;
@@ -81,10 +88,12 @@
 
 html {
     background-color: var(--bg);
+    background-image: var(--bg-image);
+    background-attachment: fixed;
 }
 
 body {
-    background-color: var(--bg);
+    background-color: transparent;
     color: var(--text);
 }
 
@@ -309,4 +318,14 @@ h1, h2, h3, h4, legend, .xmlview-input, .scale-field, .field > span, #character-
 @media (pointer: coarse) {
     :root { --tap: 44px; }
     button, .chip, #theme-toggle { font-size: 0.95rem; }
+}
+
+
+/* reduced motion: no slides/fades, no button sink animation */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

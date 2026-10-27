@@ -106,3 +106,10 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 - Icons/logo PNGs live in `svelte-frontend/public/assets/icons/` (`favicon.png`, `hat-packer-logo.png`); names/paths are centralized in `svelte-frontend/src/branding.ts`. Replace a file with the same name to change it.
 - Auto-Trim now has 3 modes (On import [default] / On Generate / Off). Files are never modified; trimmed frames keep their offsets (`frameX/frameY`) and original size (`frameWidth/frameHeight`). Frame sizes are real pixels.
 - Smaller, more compact UI on mouse devices; touch devices keep 44px targets.
+
+## v1.4.0
+- More compact modals/menus/frame cards (modals scroll inside; preview areas take the freed space).
+- Fade + slide transitions for modals, menus and tab switches (150-250 ms); respects `prefers-reduced-motion`.
+- Each frame card shows its size: `62 x 46 px - from 101 x 83` (trimmed vs. original). The XML Inspector shows width/height, frameX/frameY and frameWidth/frameHeight separately.
+- Soft blue background (static gradients).
+- Button click sounds (`svelte-frontend/public/assets/sounds/ui/`, wired in `src/sounds.ts`); can be turned off in Settings.

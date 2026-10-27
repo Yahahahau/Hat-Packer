@@ -215,6 +215,16 @@
 		display: none;
 	}
 
+	/* switching tabs: short fade (opacity only, no layout change) */
+	.pane:not([hidden]) {
+		animation: pane-in 0.2s ease-out;
+	}
+
+	@keyframes pane-in {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
 	/* 10-11 inch tablets in landscape: keep everything on one header row */
 	@media screen and (max-width: 1100px) {
 		#character-name-control > label,
@@ -230,6 +240,7 @@
 	@media screen and (max-width: 900px) {
 		#app-tabs {
 			order: 3;
+			min-width: 0;
 			flex: 1 1 100%;
 			max-width: none;
 		}

@@ -13,6 +13,11 @@
     let spriteframesize = 120;
     let showImage = false;
 
+    // visible (trimmed) size = the rect that gets packed; original = frameWidth/frameHeight
+    $: shownW = frameInfo.rect.width;
+    $: shownH = frameInfo.rect.height;
+    $: wasTrimmed = frameInfo.frameRect.frameWidth !== shownW || frameInfo.frameRect.frameHeight !== shownH;
+
     let animController: AnimationController;
     onMount(()=>{
         const obs = new IntersectionObserver(async (entries, observer)=>{
@@ -160,6 +165,7 @@
         </canvas>
     </div>
     <p class="frame-name">{frameInfo.animationPrefix}</p>
+    <p class="frame-size" title="Packed size{wasTrimmed ? ' (after trim) / original size' : ''}">{shownW} &times; {shownH} px{#if wasTrimmed}<span class="frame-orig"> &middot; from {frameInfo.frameRect.frameWidth} &times; {frameInfo.frameRect.frameHeight}</span>{/if}</p>
 </div>
 
 <style>
@@ -170,7 +176,7 @@
         align-items: center;
         gap: 6px;
         min-width: 0;
-        padding: 40px 8px 8px;
+        padding: 36px 6px 6px;
         border: 2px solid var(--border);
         border-radius: var(--radius);
         background-color: var(--surface-2);
@@ -238,6 +244,17 @@
         height: 34px;
         padding: 0;
         border-radius: 10px;
+    }
+
+    .frame-size {
+        width: 100%;
+        margin: -4px 0 0;
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .frame-name {
