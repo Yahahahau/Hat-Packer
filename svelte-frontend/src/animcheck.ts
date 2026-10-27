@@ -8,6 +8,8 @@ export function playCheck(el: HTMLInputElement) {
     el.classList.remove('ck-play-on', 'ck-play-off');
     void el.offsetWidth; // restart the animation if it was still running
     el.classList.add(el.checked ? 'ck-play-on' : 'ck-play-off');
+    // safety net: whatever happens, go back to the still image (checked / unchecked) after the animation
+    window.setTimeout(() => el.classList.remove('ck-play-on', 'ck-play-off'), 700);
 }
 
 export function initAnimatedChecks() {

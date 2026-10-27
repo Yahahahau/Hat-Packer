@@ -69,12 +69,16 @@ button {
 	--ck-off-start: 18;  /* first cell of the turn-off animation */
 	--ck-off-steps: 11;  /* = --ck-off - --ck-off-start */
 	--ck-img: url("assets/icons/checkbox/strip-dark.png");
+	/* resting states are plain still images from the atlas: they stay until the next click */
+	--ck-still-on: url("assets/icons/checkbox/still-on.png");
+	--ck-still-off: url("assets/icons/checkbox/still-off-white.png");
 }
 :root.light-mode, .light-mode {
 	--ck-n: 34;
 	--ck-off: 33;
 	--ck-off-steps: 15;
 	--ck-img: url("assets/icons/checkbox/strip-light.png");
+	--ck-still-off: url("assets/icons/checkbox/still-off-black.png");
 }
 
 html input[type="checkbox"] {
@@ -88,16 +92,23 @@ html input[type="checkbox"] {
 	border: 0;
 	border-radius: 6px;
 	background-color: transparent;
-	background-image: var(--ck-img);
+	background-image: var(--ck-still-off);
 	background-repeat: no-repeat;
-	background-size: calc(var(--ck) * var(--ck-n)) var(--ck);
-	background-position: calc(var(--ck) * var(--ck-off) * -1) 0;
+	background-size: 100% 100%;
+	background-position: 0 0;
 	box-shadow: none;
 	cursor: pointer;
 }
 
 html input[type="checkbox"]:checked {
-	background-position: calc(var(--ck) * var(--ck-on) * -1) 0;
+	background-image: var(--ck-still-on);
+}
+
+/* only while the transition runs, the sprite strip replaces the still image */
+html input[type="checkbox"].ck-play-on,
+html input[type="checkbox"].ck-play-off {
+	background-image: var(--ck-img);
+	background-size: calc(var(--ck) * var(--ck-n)) var(--ck);
 }
 
 html input[type="checkbox"]:focus-visible {

@@ -131,3 +131,6 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 ## v1.6.0 - Animated checkboxes
 - All checkboxes use the supplied on/off animation (turn-on frames + turn-off frames). White off-box in dark mode, black off-box in light mode. Respects `prefers-reduced-motion`.
 - Sprite strips: `svelte-frontend/public/assets/icons/checkbox/`; the original atlas (PNG + XML) is kept in `svelte-frontend/assets-src/checkbox/`. Logic: `src/animcheck.ts` + CSS at the end of `public/global.css`.
+
+### v1.6.1
+- Checkbox resting states are now plain still images from the atlas (checked = last "turn on" frame, unchecked = "turn off idle", white or black by theme). They stay until the next click; the sprite strip is only used while the transition plays.
