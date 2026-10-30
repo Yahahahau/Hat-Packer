@@ -13,6 +13,7 @@
         uniqueFramesOnly: false,
         clipToBoundingBox: true,
         autoTrim: 'import',
+        sequenceFullCanvas: false,
         xmlAnimPrefixTrimChars: -1,
         importOrder: 'natural',
     };
@@ -52,6 +53,19 @@
                 <code>frameX/frameY</code> = where the trimmed area sits (negative offset), <code>frameWidth/frameHeight</code> = original image size.
                 Images are trimmed once only. The mode applies to images added afterwards; frames that are already in the list keep how they were added.
             </p>
+        </fieldset>
+        <fieldset>
+            <legend>
+                PNG sequence export
+            </legend>
+            <label for="seq-trimmed">
+                <input type="radio" name="seq-canvas" id="seq-trimmed" value={false} bind:group={settings.sequenceFullCanvas}>
+                Trimmed images (real pixel size) + offsets.csv
+            </label>
+            <label for="seq-full">
+                <input type="radio" name="seq-canvas" id="seq-full" value={true} bind:group={settings.sequenceFullCanvas}>
+                Full-size frames (original canvas, e.g. 512 &times; 512)
+            </label>
         </fieldset>
         <fieldset>
             <legend>

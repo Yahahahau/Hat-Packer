@@ -224,12 +224,12 @@
 
 	/* switching tabs: short fade (opacity only, no layout change) */
 	.pane:not([hidden]) {
-		animation: pane-in 0.2s ease-out;
+		animation: pane-in var(--dur-tab) var(--ease-in);
 	}
 
 	@keyframes pane-in {
-		from { opacity: 0; }
-		to { opacity: 1; }
+		from { opacity: 0; transform: translateY(4px); }
+		to { opacity: 1; transform: none; }
 	}
 
 	/* 10-11 inch tablets in landscape: keep everything on one header row */

@@ -327,7 +327,14 @@ impl GrowingPacker
         return zip_buf;
     }
 
-    pub fn make_img_sequence(&self, unique_only: bool) -> Vec<u8>
+    /// Exports every frame as its own PNG inside a ZIP.
+    ///
+    /// * `full_canvas == false` (default in the UI): each PNG is the real, trimmed image (e.g. 180 x 240),
+    ///   exactly the pixels that are packed into the atlas. Because trimming drops the position of the
+    ///   pixels, an `offsets.csv` is added so nothing is lost (original size + offset of every frame).
+    /// * `full_canvas == true`: each PNG is re-created at the original frame size (e.g. 512 x 512) with the
+    ///   trimmed pixels put back at their offset (the exact frame as the engine would show it).
+    pub fn make_img_sequence(&self, unique_only: bool, full_canvas: bool) -> Vec<u8>
     {
         let mut zip_buf: Vec<u8> = Vec::new();
         let zipcursor = io::Cursor::new(&mut zip_buf);
@@ -336,46 +343,77 @@ impl GrowingPacker
         let zip_opts = zip::write::FileOptions::default();
 
         let mut prefix_counter = PrefixCounter::new();
+        let mut offsets_csv = String::from("file,width,height,frameX,frameY,frameWidth,frameHeight\n");
+        let mut any_trimmed = false;
 
         if !unique_only
         {
+            // frames are written in the order they were added (self.frames is a HashMap, so sort by index)
+            let mut ordered: Vec<(&FrameInfo, &DynamicImage)> = Vec::new();
             for (imghash, frames) in self.frames.iter()
             {
-                let img = self.frame_image_cache.cache.get(imghash);
-                if let Some(im) = img {
-                    for f in frames
-                    {
-                        // re-create the exact frame as it would appear in flixel
-
-                        let mut final_dims = (f.frame_rect.frame_width, f.frame_rect.frame_height);
-                        let mut placing_position = (0, 0);
-                        if f.frame_rect.frame_x > 0
-                        {
-                            final_dims.0 += f.frame_rect.frame_x as u64;
-                        }
-                        else
-                        {
-                            placing_position.0 = -f.frame_rect.frame_x;
-                        }
-
-                        if f.frame_rect.frame_y > 0
-                        {
-                            final_dims.1 += f.frame_rect.frame_y as u64;
-                        }
-                        else
-                        {
-                            placing_position.1 = -f.frame_rect.frame_y;
-                        }
-
-                        let mut final_frame = DynamicImage::new_rgba8(final_dims.0 as u32, final_dims.1 as u32);
-                        imageops::overlay(&mut final_frame, im, placing_position.0, placing_position.1);
-                        
-                        let pngbytes = encode_image_as_png(&final_frame);
-                        let anim_num = prefix_counter.add_prefix(&f.animation_prefix);
-                        zip_writer.start_file(format!("{}{}.png", f.animation_prefix, anim_num), zip_opts).expect("Error writing to zip!");
-                        zip_writer.write_all(&pngbytes).expect("Zipping error!");
-                    }
+                if let Some(im) = self.frame_image_cache.cache.get(imghash) {
+                    for f in frames { ordered.push((f, im)); }
                 }
+            }
+            ordered.sort_by_key(|(f, _)| f._index);
+
+            for (f, im) in ordered
+            {
+                let anim_num = prefix_counter.add_prefix(&f.animation_prefix);
+                let file_name = format!("{}{}.png", f.animation_prefix, anim_num);
+
+                let pngbytes = if full_canvas
+                {
+                    // re-create the exact frame as it would appear in flixel
+                    let mut final_dims = (f.frame_rect.frame_width, f.frame_rect.frame_height);
+                    let mut placing_position = (0, 0);
+                    if f.frame_rect.frame_x > 0
+                    {
+                        final_dims.0 += f.frame_rect.frame_x as u64;
+                    }
+                    else
+                    {
+                        placing_position.0 = -f.frame_rect.frame_x;
+                    }
+
+                    if f.frame_rect.frame_y > 0
+                    {
+                        final_dims.1 += f.frame_rect.frame_y as u64;
+                    }
+                    else
+                    {
+                        placing_position.1 = -f.frame_rect.frame_y;
+                    }
+
+                    let mut final_frame = DynamicImage::new_rgba8(final_dims.0 as u32, final_dims.1 as u32);
+                    imageops::overlay(&mut final_frame, im, placing_position.0, placing_position.1);
+                    encode_image_as_png(&final_frame)
+                }
+                else
+                {
+                    // the real trimmed pixels, no empty canvas around them
+                    if (im.width() as u64) != f.frame_rect.frame_width || (im.height() as u64) != f.frame_rect.frame_height
+                        || f.frame_rect.frame_x != 0 || f.frame_rect.frame_y != 0
+                    {
+                        any_trimmed = true;
+                    }
+                    offsets_csv.push_str(&format!(
+                        "{},{},{},{},{},{},{}\n",
+                        file_name, im.width(), im.height(),
+                        f.frame_rect.frame_x, f.frame_rect.frame_y, f.frame_rect.frame_width, f.frame_rect.frame_height
+                    ));
+                    encode_image_as_png(im)
+                };
+
+                zip_writer.start_file(file_name, zip_opts).expect("Error writing to zip!");
+                zip_writer.write_all(&pngbytes).expect("Zipping error!");
+            }
+
+            if !full_canvas && any_trimmed
+            {
+                zip_writer.start_file("offsets.csv", zip_opts).expect("Error writing to zip!");
+                zip_writer.write_all(offsets_csv.as_bytes()).expect("Zipping error!");
             }
         }
         else
@@ -452,6 +490,89 @@ mod tests {
 
     fn add(gp: &mut GrowingPacker, data: Vec<u8>, name: &str, w: u32, h: u32, clip: bool) {
         gp.add_single_frame(data, name.to_string(), w, h, false, false, 0, 0, w as u64, h as u64, clip);
+    }
+
+    fn png_dims(bytes: &[u8]) -> (u32, u32) {
+        let im = image::load_from_memory(bytes).unwrap();
+        (im.width(), im.height())
+    }
+
+    fn zip_entries(zip_bytes: Vec<u8>) -> Vec<(String, Vec<u8>)> {
+        let mut z = zip::ZipArchive::new(io::Cursor::new(zip_bytes)).unwrap();
+        let mut out = vec![];
+        for i in 0..z.len() {
+            let mut f = z.by_index(i).unwrap();
+            let mut b = vec![];
+            f.read_to_end(&mut b).unwrap();
+            out.push((f.name().to_string(), b));
+        }
+        out
+    }
+
+    /// 512 x 512 image whose visible pixels are 180 x 240 at (100, 50): the exports must really be that size.
+    #[test]
+    fn exports_use_trimmed_pixels_not_the_original_canvas() {
+        let data = png(512, 512, Some((100, 50, 280, 290)));
+        for cropped_at_import in [false, true] {
+            let mut gp = GrowingPacker::new("c".to_string(), 0);
+            if cropped_at_import {
+                gp.add_single_frame_cropped(data.clone(), "idle".into(), 100, 50, 180, 240, 180, 240, false, false, -100, -50, 512, 512, true);
+            } else {
+                add(&mut gp, data.clone(), "idle", 512, 512, true);
+            }
+
+            // atlas PNG is exactly the packed size, XML matches it
+            let entries = zip_entries(gp.make_packed_image());
+            let atlas = entries.iter().find(|(n, _)| n == "c.png").unwrap();
+            assert_eq!(png_dims(&atlas.1), (180, 240), "atlas size (cropped_at_import={})", cropped_at_import);
+            let xml = String::from_utf8(entries.iter().find(|(n, _)| n == "c.xml").unwrap().1.clone()).unwrap();
+            assert!(xml.contains("width=\"180\"") && xml.contains("height=\"240\""), "{}", xml);
+            assert!(xml.contains("frameX=\"-100\"") && xml.contains("frameY=\"-50\""), "{}", xml);
+            assert!(xml.contains("frameWidth=\"512\"") && xml.contains("frameHeight=\"512\""), "{}", xml);
+
+            // PNG sequence (default): trimmed 180 x 240 + offsets.csv that keeps the original size / offset
+            let seq = zip_entries(gp.make_img_sequence(false, false));
+            let frame = seq.iter().find(|(n, _)| n == "idle0.png").expect("idle0.png");
+            assert_eq!(png_dims(&frame.1), (180, 240), "sequence frame size (cropped_at_import={})", cropped_at_import);
+            let csv = String::from_utf8(seq.iter().find(|(n, _)| n == "offsets.csv").expect("offsets.csv").1.clone()).unwrap();
+            assert!(csv.contains("idle0.png,180,240,-100,-50,512,512"), "{}", csv);
+
+            // PNG sequence, full canvas option: the old 512 x 512 behaviour
+            let full = zip_entries(gp.make_img_sequence(false, true));
+            let f2 = full.iter().find(|(n, _)| n == "idle0.png").unwrap();
+            assert_eq!(png_dims(&f2.1), (512, 512));
+            assert!(full.iter().all(|(n, _)| n != "offsets.csv"));
+
+            // unique frames export is the trimmed image as well
+            let uniq = zip_entries(gp.make_img_sequence(true, false));
+            assert_eq!(uniq.len(), 1);
+            assert_eq!(png_dims(&uniq[0].1), (180, 240));
+        }
+    }
+
+    #[test]
+    fn sequence_of_untrimmed_images_has_no_offsets_file_and_keeps_order() {
+        let mut gp = GrowingPacker::new("c".to_string(), 0);
+        add(&mut gp, png(30, 20, Some((0, 0, 30, 20))), "b", 30, 20, true);
+        add(&mut gp, png(31, 21, Some((0, 0, 31, 21))), "a", 31, 21, true);
+        add(&mut gp, png(33, 22, Some((0, 0, 33, 22))), "b", 33, 22, true);
+        let seq = zip_entries(gp.make_img_sequence(false, false));
+        let names: Vec<&str> = seq.iter().map(|(n, _)| n.as_str()).collect();
+        assert_eq!(names, vec!["b0.png", "a0.png", "b1.png"], "added order kept");
+        assert_eq!(png_dims(&seq[0].1), (30, 20));
+        assert_eq!(png_dims(&seq[2].1), (33, 22));
+    }
+
+    #[test]
+    fn transparent_and_solid_sequence_export_is_safe() {
+        let mut gp = GrowingPacker::new("c".to_string(), 0);
+        add(&mut gp, png(16, 16, None), "empty", 16, 16, true);
+        add(&mut gp, png(16, 16, Some((0, 0, 16, 16))), "solid", 16, 16, true);
+        let seq = zip_entries(gp.make_img_sequence(false, false));
+        let pngs: Vec<_> = seq.iter().filter(|(n, _)| n.ends_with(".png")).collect();
+        assert_eq!(pngs.len(), 2);
+        for (_, b) in pngs { let (w, h) = png_dims(b); assert!(w >= 1 && h >= 1); }
+        assert_eq!(png_dims(&seq.iter().find(|(n, _)| n == "solid0.png").unwrap().1), (16, 16));
     }
 
     #[test]
@@ -553,7 +674,7 @@ mod tests {
             let line = xml.lines().find(|l| l.contains(&format!("name=\"f{}0000\"", i))).unwrap();
             assert!(line.contains(&format!("frameWidth=\"{}\"", w)) && line.contains(&format!("frameHeight=\"{}\"", h)), "{}", line);
         }
-        let rebuilt = seq_frames(gp.make_img_sequence(false));
+        let rebuilt = seq_frames(gp.make_img_sequence(false, true));
         assert_eq!(rebuilt.len(), originals.len());
         for (i, (w, h, px)) in originals.iter().enumerate() {
             let r = rebuilt.iter().find(|r| r.0 == *w && r.1 == *h).expect("frame size kept");

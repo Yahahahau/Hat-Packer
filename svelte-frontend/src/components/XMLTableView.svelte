@@ -62,7 +62,8 @@
 
     function onKeyPressTable(ev: KeyboardEvent)
     {
-        ev.preventDefault();
+        // only the navigation keys are handled here; Escape / Tab etc. must keep working (close dialog, move focus)
+        if(['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(ev.key)) ev.preventDefault();
         switch (ev.key)
         {
             case 'ArrowUp':
@@ -363,6 +364,15 @@
             <div class="canvas-div">
                 <canvas bind:this={canvasElement} width="600px" height="500px"></canvas>
             </div>
+            <p class="size-info" aria-live="polite">
+                {#if curSprFrame}
+                    <span>Original: <strong>{curSprFrame.frameRect.frameWidth} &times; {curSprFrame.frameRect.frameHeight} px</strong></span>
+                    <span>Trimmed: <strong>{curSprFrame.rect.width} &times; {curSprFrame.rect.height} px</strong></span>
+                    <span class="muted">solid line = frame, dashed = real pixels</span>
+                {:else}
+                    <span class="muted">Select a frame to see its original and trimmed size.</span>
+                {/if}
+            </p>
 
             <div class="controls-horizontal">
                 <fieldset class="group-frame">
@@ -572,6 +582,18 @@
     }
 
     /* ---------- inspector ---------- */
+    .size-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 14px;
+        margin: 0;
+        font-size: 0.8rem;
+    }
+
+    .size-info strong {
+        font-family: var(--font-read);
+    }
+
     .canvas-div {
         flex: 1 1 200px;
         min-height: 160px;

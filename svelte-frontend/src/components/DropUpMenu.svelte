@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { cubicOut } from "svelte/easing";
+    import { cubicOut, cubicIn } from "svelte/easing";
     import Icon from "./Icon.svelte";
 
     let menuShown = false;
@@ -29,13 +29,13 @@
     }
 
     // fade + small slide (opacity/translate only, so the menu never changes size); none when reduced motion is on
-    function fadeNSlide(node: Element, options: { duration: number })
+    function fadeNSlide(node: Element, options: { duration: number, leaving?: boolean })
     {
         const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
         const dy = direction === 'up' ? 8 : -8;
         return {
             duration: reduced ? 0 : options.duration,
-            easing: cubicOut,
+            easing: options.leaving ? cubicIn : cubicOut, // matches --ease-in / --ease-out
             css: (t: number) => `opacity: ${t}; transform: translateY(${(1 - t) * dy}px); pointer-events: none;`
         };
     }
@@ -61,7 +61,7 @@
             on:click|capture={() => { menuShown = false; }}
             class="drop-up-menu {direction} {align}"
             in:fadeNSlide="{{ duration: 170 }}"
-            out:fadeNSlide="{{ duration: 130 }}"
+            out:fadeNSlide="{{ duration: 130, leaving: true }}"
         >
             <slot />
         </div>

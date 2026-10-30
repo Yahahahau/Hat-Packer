@@ -134,3 +134,10 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 
 ### v1.6.1
 - Checkbox resting states are now plain still images from the atlas (checked = last "turn on" frame, unchecked = "turn off idle", white or black by theme). They stay until the next click; the sprite strip is only used while the transition plays.
+
+## v1.7.0 - Real trimmed exports, size labels, motion system
+- **Fix:** *Generate PNG sequence* re-created every frame at the original canvas (e.g. 512 x 512) even after Auto-Trim. It now exports the real trimmed pixels (e.g. 180 x 240) plus an `offsets.csv` (file, width, height, frameX, frameY, frameWidth, frameHeight) so no position data is lost. Settings > *PNG sequence export* can switch back to full-size frames. The sprite sheet atlas (PNG + XML) already used the trimmed pixels; both are now covered by tests that read the real PNG sizes from the generated ZIP. Frames in the sequence are written in the order they were added.
+- Frame cards show `Trimmed: w x h px` and `Original: W x H px` separately. The XML Inspector preview shows the frame (solid line) and the real pixels (dashed blue line) and an Original / Trimmed caption.
+- Fixed: Escape / Tab did not work while a row of the XML Inspector table had focus.
+- Motion tokens (`--ease-std`, `--ease-in`, `--ease-out`, `--dur-*`) used by buttons, modals, menus, tabs and status messages; status messages slide/fade in and out; checkbox animation is faster. All respect `prefers-reduced-motion`.
+- Slightly smaller type scale on desktop/tablet (15px base) and tighter toolbar padding.

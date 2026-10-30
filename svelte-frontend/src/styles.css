@@ -42,6 +42,16 @@
     --btn-danger-face: #3a2530;
     --btn-danger-edge: #12080c;
 
+    /* motion tokens: one system for the whole UI */
+    --ease-std: cubic-bezier(0.4, 0, 0.2, 1);   /* standard transitions (hover, press, state changes) */
+    --ease-in: cubic-bezier(0, 0, 0.2, 1);      /* element entering: fast start, soft landing */
+    --ease-out: cubic-bezier(0.4, 0, 1, 1);     /* element leaving: soft start, quick exit */
+    --dur-press: 120ms;   /* button press 100-160 */
+    --dur-hover: 150ms;   /* hover / focus 120-180 */
+    --dur-menu: 170ms;    /* dropdown / tooltip 140-200 */
+    --dur-modal: 210ms;   /* modal / panel 180-240 */
+    --dur-tab: 220ms;     /* tab / main content 180-260 */
+
     /* layout tokens (overridden per breakpoint / device below) */
     --pad: 6px;            /* outer padding */
     --pad-x: 10px;
@@ -136,9 +146,9 @@ button,
     -webkit-touch-callout: none;
     touch-action: manipulation;
     transition:
-        transform 0.12s cubic-bezier(0.2, 0.8, 0.3, 1),
-        box-shadow 0.12s cubic-bezier(0.2, 0.8, 0.3, 1),
-        background-color 0.12s;
+        transform var(--dur-press) var(--ease-std),
+        box-shadow var(--dur-press) var(--ease-std),
+        background-color var(--dur-hover) var(--ease-std);
 }
 
 button:enabled:hover,
@@ -506,3 +516,7 @@ html[data-layout="phone"] #empty-state { padding: 20px 12px; }
 html[data-layout="phone"] #empty-state svg { width: 30px; height: 30px; }
 html[data-layout="phone"] #empty-state p { font-size: 0.85rem; }
 html[data-layout="phone"] #status-line { font-size: 0.8rem; padding: 4px 4px 4px 8px; }
+
+
+/* ---------- Type scale (compact, desktop/tablet): body 15px, buttons ~13px, small text ~12px ---------- */
+html[data-layout="desktop"], html[data-layout="tablet"] { font-size: 15px; }

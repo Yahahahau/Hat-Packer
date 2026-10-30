@@ -117,11 +117,11 @@ html input[type="checkbox"]:focus-visible {
 }
 
 html input[type="checkbox"].ck-play-on {
-	animation: ck-on 0.55s steps(var(--ck-on)) forwards;
+	animation: ck-on 0.4s steps(var(--ck-on)) forwards;
 }
 
 html input[type="checkbox"].ck-play-off {
-	animation: ck-off 0.45s steps(var(--ck-off-steps)) forwards;
+	animation: ck-off 0.32s steps(var(--ck-off-steps)) forwards;
 }
 
 @keyframes ck-on {

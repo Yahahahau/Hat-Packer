@@ -176,7 +176,7 @@
         </canvas>
     </div>
     <p class="frame-name">{frameInfo.animationPrefix}</p>
-    <p class="frame-size" title="Packed size{wasTrimmed ? ' (after trim) / original size' : ''}">{shownW} &times; {shownH} px{#if wasTrimmed}<span class="frame-orig">from {frameInfo.frameRect.frameWidth} &times; {frameInfo.frameRect.frameHeight}</span>{/if}</p>
+    <p class="frame-size" title="Packed size{wasTrimmed ? ' (after trim) / original size' : ''}">{#if wasTrimmed}Trimmed: {shownW} &times; {shownH} px<span class="frame-orig">Original: {frameInfo.frameRect.frameWidth} &times; {frameInfo.frameRect.frameHeight} px</span>{:else}{shownW} &times; {shownH} px{/if}</p>
 </div>
 
 <style>

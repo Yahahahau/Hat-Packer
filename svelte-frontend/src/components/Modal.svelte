@@ -12,7 +12,7 @@
 	export let size: 'md' | 'lg' = 'md';
 
 	let closing = false;
-	const CLOSE_MS = 170;
+	const CLOSE_MS = 180; // = --dur-exit below
 	const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	// open / close driven by the parent (no animation when closed from outside)
@@ -150,20 +150,20 @@
 	/* the accept button (slot) is styled as the primary action in styles.css */
 	/* open: fade + small slide up; close: fade + slide down. Size never changes (opacity/translate only). */
 	dialog[open] {
-		animation: modal-in 0.2s cubic-bezier(0.2, 0.8, 0.3, 1);
+		animation: modal-in var(--dur-modal) var(--ease-in);
 	}
 	dialog[open]::backdrop {
-		animation: fade-in 0.2s ease-out;
+		animation: fade-in var(--dur-modal) var(--ease-in);
 	}
 	dialog.closing {
 		pointer-events: none;
-		animation: modal-out 0.17s ease-in forwards;
+		animation: modal-out 180ms var(--ease-out) forwards;
 	}
 	dialog.closing::backdrop {
-		animation: fade-out 0.17s ease-in forwards;
+		animation: fade-out 180ms var(--ease-out) forwards;
 	}
 	@keyframes modal-in {
-		from { opacity: 0; transform: translateY(14px); }
+		from { opacity: 0; transform: translateY(10px); }
 		to { opacity: 1; transform: none; }
 	}
 	@keyframes modal-out {

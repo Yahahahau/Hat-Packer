@@ -99,6 +99,18 @@ export class AnimationController {
             transform.newHeight
         );
 
+        if(withBoundingBox)
+        {
+            // dashed: the real (trimmed) pixels, drawn with the very same transform / offsets as the image,
+            // so it always follows the data that is packed and exported
+            this.context.save();
+            this.context.setLineDash([5 / this.animationScale, 4 / this.animationScale]);
+            this.context.strokeStyle = '#4f8cff';
+            this.context.lineWidth = 1 / this.animationScale;
+            this.context.strokeRect(-frame.frameX * flipFactorX, -frame.frameY * flipFactorY, transform.newWidth, transform.newHeight);
+            this.context.restore();
+        }
+
         this.context.restore();
 
         if(withClipping)
@@ -120,9 +132,13 @@ export class AnimationController {
 
         if(withBoundingBox)
         {
+            this.context.save();
+            this.context.strokeStyle = '#9ba5b8';
             this.context.beginPath();
+            // solid: the frame canvas (original size, what the engine positions)
             this.context.rect(0, 0, frame.frameWidth * this.animationScale, frame.frameHeight * this.animationScale);
             this.context.stroke();
+            this.context.restore();
         }
 
     }

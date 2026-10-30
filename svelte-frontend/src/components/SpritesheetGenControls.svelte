@@ -1,5 +1,7 @@
 <script lang="ts">
     import Modal from '../components/Modal.svelte';
+    import { fly, fade } from 'svelte/transition';
+    import { cubicOut, cubicIn } from 'svelte/easing';
     import { sortFilesNaturally, yieldToUI, naturalCompare, findOpaqueBounds } from '../importutils';
     import { readZip, matchAtlas, ZipImportError } from '../zipimport';
     import { deferTask, getImageDimensions, hashImage, isValidFilename, openFileDialog, removeNumericSuffix, saveFile, uidgen } from '../utils'
@@ -26,6 +28,7 @@
         customPrefix: '',
         uniqueFramesOnly: false,
         clipToBoundingBox: true, // derived from autoTrim below (kept because the generate code reads it)
+        sequenceFullCanvas: false, // PNG sequence: false = real trimmed images (+ offsets.csv), true = original-size canvas
         autoTrim: 'import',      // 'import' = trim right after import, 'generate' = trim when generating, 'off'
         xmlAnimPrefixTrimChars: -1,
         importOrder: 'natural', // 'natural' = natural numeric sort of file names, 'browser' = order given by the file picker
@@ -54,6 +57,11 @@
      * Existing frames are never re-sorted or moved. Files are read in small batches so the
      * page keeps responding (important on iOS/Android with many images).
      */
+    const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // toast / status message: soft slide-in, quick fade-out (no motion when reduced motion is on)
+    const toastIn = (node: Element) => fly(node, { y: 8, duration: reducedMotion() ? 0 : 180, easing: cubicOut });
+    const toastOut = (node: Element) => fade(node, { duration: reducedMotion() ? 0 : 130, easing: cubicIn });
+
     let trimmedCount = 0;
     $: imgSettings.clipToBoundingBox = imgSettings.autoTrim !== 'off';
 
@@ -601,7 +609,7 @@
             progTxt = 'Zipping individual frames....';
             deferTask(()=>{
                 try {
-                    const finalImage = growingpacker.make_img_sequence(imgSettings.uniqueFramesOnly);
+                    const finalImage = growingpacker.make_img_sequence(imgSettings.uniqueFramesOnly, imgSettings.sequenceFullCanvas);
                     saveFile(finalImage, charname + '.zip');
                     setStatus('info', 'Done - ' + charname + '.zip was downloaded.');
                 } catch (err) {
@@ -686,7 +694,7 @@
 </div>
 
 {#if statusMsg}
-    <div id="status-line" class="status-{statusKind}" role={statusKind === 'error' ? 'alert' : 'status'}>
+    <div id="status-line" in:toastIn out:toastOut class="status-{statusKind}" role={statusKind === 'error' ? 'alert' : 'status'}>
         <Icon name={statusKind === 'error' ? 'alert' : 'check'} size={18} />
         <span>{statusMsg}</span>
         <button type="button" class="status-close btn-flat" aria-label="Dismiss" on:click={() => setStatus('', '')}><Icon name="x" size={16} /></button>
@@ -734,8 +742,8 @@
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: 8px 12px;
-        padding: 8px 8px 13px;
+        gap: 6px 10px;
+        padding: 6px 6px 11px;
         background-color: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--radius);
