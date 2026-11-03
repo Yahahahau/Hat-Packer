@@ -37,6 +37,10 @@
         'phone': '<rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/>',
         'tablet': '<rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M11 18h2"/>',
         'desktop': '<rect x="2.5" y="4" width="19" height="12.5" rx="2"/><path d="M8 21h8M12 16.5V21"/>',
+        'undo': '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+        'redo': '<path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>',
+        'plus': '<path d="M12 5v14M5 12h14"/>',
+        'edit': '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
         'alert': '<path d="M12 3 2 20h20L12 3z"/><path d="M12 10v5M12 18v.01"/>',
     };
 </script>

@@ -12,6 +12,7 @@ export class AnimationController {
     fps: number;
     animationScale: number;
     isPlaying: boolean;
+    onFrame: ((index: number) => void) | null = null;
 
     constructor(ctx2d: CanvasRenderingContext2D)
     {
@@ -54,6 +55,7 @@ export class AnimationController {
         {
             const curFrame = this.curFrames[this.curFrameIndex];
             const img = this.curImgs[this.curFrameIndex];
+            if(this.onFrame) this.onFrame(this.curFrameIndex);
             this.curFrameIndex = (this.curFrameIndex + 1) % this.curFrames.length;
 
             this.clearCanvas();
@@ -185,6 +187,26 @@ export class AnimationController {
     {
         this.animId = requestAnimationFrame((ts)=>{ this.tick(ts); });
         this.isPlaying = true;
+    }
+
+    // pause keeps the loaded frames (stopAnimation resets everything)
+    pause()
+    {
+        if(this.animId !== null) cancelAnimationFrame(this.animId);
+        this.animId = null;
+        this.isPlaying = false;
+        this.prev = null;
+        this.ticks = 0;
+    }
+
+    // draw one frame (used by the frame strip and for the still preview)
+    showFrame(index: number)
+    {
+        const n = this.curFrames.length;
+        if(n === 0 || this.curImgs.length !== n) return;
+        this.curFrameIndex = ((index % n) + n) % n;
+        this.clearCanvas();
+        this.drawImage(this.curImgs[this.curFrameIndex], this.curFrames[this.curFrameIndex]);
     }
 
     stopAnimation()

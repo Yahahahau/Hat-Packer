@@ -10,6 +10,10 @@
 	export let closeButtonMsg = "Close";
 	// "md" for small forms, "lg" for wide tools (inspector / preview)
 	export let size: 'md' | 'lg' = 'md';
+	// full: on phones the dialog is a full-screen page with a Back button (XML Inspector, Animation)
+	export let full = false;
+	// sheet: action sheet without footer (phone: docked to the bottom)
+	export let sheet = false;
 
 	let closing = false;
 	const CLOSE_MS = 180; // = --dur-exit below
@@ -41,6 +45,8 @@
 <dialog
 	bind:this={dialog}
 	class={size}
+	class:full
+	class:sheet
 	class:closing
 	on:cancel|preventDefault={requestClose}
 	on:close={() => { showModal = false; onClose();}}
@@ -48,17 +54,22 @@
 >
 	<div class="shell" on:click|stopPropagation>
 		<header class="modal-header">
+			{#if full}
+				<button type="button" class="back-btn btn-flat" on:click={requestClose}><Icon name="chevron-left" /> <span>Back</span></button>
+			{/if}
 			<div class="modal-title"><slot name="header" /></div>
 			<button type="button" class="icon-btn btn-flat" aria-label="Close" on:click={requestClose}><Icon name="x" /></button>
 		</header>
 		<div class="modal-body">
 			<slot />
 		</div>
+		{#if !sheet}
 		<footer class="modal-footer">
 			<slot name="accept-btn" />
 			<!-- svelte-ignore a11y-autofocus -->
 			<button autofocus on:click={requestClose}>{ closeButtonMsg }</button>
 		</footer>
+		{/if}
 	</div>
 </dialog>
 
@@ -178,6 +189,32 @@
 		from { opacity: 1; }
 		to { opacity: 0; }
 	}
+	.back-btn { display: none; align-items: center; gap: 4px; padding: 0 10px 0 4px; min-height: var(--tap); flex: none; }
+
+	/* ----- phone: dialogs are bottom sheets; `full` ones are full-screen pages with a Back button ----- */
+	:global(html[data-layout="phone"]) dialog:not(.full) {
+		width: 100vw;
+		margin: auto 0 0;
+		max-height: 88dvh;
+		border-radius: 16px 16px 0 0;
+		border-bottom: 0;
+		animation-name: sheet-in;
+	}
+	:global(html[data-layout="phone"]) dialog:not(.full) .modal-body { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+	:global(html[data-layout="phone"]) dialog:not(.full) .modal-footer { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+	:global(html[data-layout="phone"]) dialog:not(.full).closing { animation-name: sheet-out; }
+	:global(html[data-layout="phone"]) dialog.full {
+		width: 100vw; height: 100dvh; max-height: 100dvh; max-width: 100vw;
+		margin: 0; border-radius: 0; border: 0;
+		padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+	}
+	:global(html[data-layout="phone"]) dialog.full .back-btn { display: inline-flex; }
+	:global(html[data-layout="phone"]) dialog.full .modal-footer { display: none; }
+	:global(html[data-layout="phone"]) dialog.full .modal-body { padding: 8px 10px; }
+	:global(html[data-layout="phone"]) dialog.full .modal-header > .icon-btn { display: none; }
+	:global(html[data-layout="phone"]) dialog.full .modal-title { flex: 1 1 auto; }
+	@keyframes sheet-in { from { opacity: 0.6; transform: translateY(40px); } to { opacity: 1; transform: none; } }
+	@keyframes sheet-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(40px); } }
 	@media (prefers-reduced-motion: reduce) {
 		dialog[open], dialog[open]::backdrop, dialog.closing, dialog.closing::backdrop { animation: none; }
 	}

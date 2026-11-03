@@ -37,14 +37,17 @@ export const layoutClass = writable<LayoutClass>('desktop');
 export const BP_PHONE = 640;    // below: phone layout
 export const BP_DESKTOP = 1024; // from here: desktop layout (side tool panel)
 
-function classify(w: number): LayoutClass {
-    return w < BP_PHONE ? 'phone' : (w < BP_DESKTOP ? 'tablet' : 'desktop');
+// A phone held sideways is wider than 640px but only ~320-430px tall: it still gets the phone layout.
+export const PHONE_LANDSCAPE_MAX_H = 480;
+function classify(w: number, h: number): LayoutClass {
+    if(w < BP_PHONE || (h <= PHONE_LANDSCAPE_MAX_H && w < BP_DESKTOP)) return 'phone';
+    return w < BP_DESKTOP ? 'tablet' : 'desktop';
 }
 
 export function initLayout() {
     const root = document.documentElement;
     const apply = () => {
-        const c = classify(window.innerWidth);
+        const c = classify(window.innerWidth, window.innerHeight);
         root.dataset.layout = c;
         root.dataset.orient = window.innerWidth >= window.innerHeight ? 'landscape' : 'portrait';
         layoutClass.set(c);

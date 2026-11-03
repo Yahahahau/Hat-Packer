@@ -138,9 +138,12 @@
             </label>
         </fieldset>
     </div>
+    <p class="about-link">Hat Packer &middot; <a href="https://yahahahau.github.io/Hat-Packer/" target="_blank" rel="noopener">yahahahau.github.io/Hat-Packer</a> &middot; <a href="https://github.com/Yahahahau/Hat-Packer" target="_blank" rel="noopener">GitHub</a></p>
 </Modal>
 
 <style>
+    .about-link { margin: 12px 0 0; font-size: 0.8rem; color: var(--text-muted); overflow-wrap: anywhere; }
+    .about-link a { color: var(--accent); }
     #modal-content {
         display: flex;
         flex-direction: column;

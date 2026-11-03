@@ -28,7 +28,7 @@
 {#if $deviceChoice === null}
 <Welcome />
 {:else}
-<main id="app-shell">
+<main id="app-shell" class:mode-icongrid={curChoice === "icongrid"}>
 	<header id="app-header">
 		<div id="brand">
 			<img id="brand-logo" src={LOGO_URL} alt="" width="52" height="30" draggable="false" />
@@ -60,7 +60,7 @@
 	<!-- both modes stay mounted so switching tabs never discards what the user already added -->
 	<div id="tab-container">
 		<div class="pane pane-spsh" hidden={curChoice !== "spsh"}>
-			<SpritesheetGenerator charname={characterName} wasm={wasm} />
+			<SpritesheetGenerator bind:charname={characterName} wasm={wasm} />
 		</div>
 		<div class="pane pane-icon" hidden={curChoice !== "icongrid"}>
 			<IcongridGenerator bind:charname={characterName} wasm={wasm} />

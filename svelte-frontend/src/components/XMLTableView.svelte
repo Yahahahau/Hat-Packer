@@ -272,7 +272,7 @@
 </script>
 
 
-<Modal bind:showModal={showView} closeButtonMsg={"Save and Close"} size="lg">
+<Modal bind:showModal={showView} closeButtonMsg={"Save and Close"} size="lg" full>
     <div slot="header">
         <h4>XML View</h4>
     </div>

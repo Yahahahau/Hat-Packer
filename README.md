@@ -1,7 +1,24 @@
+# Hat Packer
+
+> ## 🌐 เปิดใช้งานได้เลย / Open the app: **https://yahahahau.github.io/Hat-Packer/**
+> Source code: https://github.com/Yahahahau/Hat-Packer
+
+| | |
+|---|---|
+| **Website (live)** | https://yahahahau.github.io/Hat-Packer/ |
+| **Repository** | https://github.com/Yahahahau/Hat-Packer |
+| **What it is** | Friday Night Funkin' spritesheet + XML (Sparrow / TextureAtlas) maker. Import PNGs or a ZIP, Auto-Trim, check frames, preview the animation, edit XML, export. Runs fully in your browser; nothing is uploaded. |
+| **Devices** | Phone (bottom navigation + sheets), tablet, desktop. Chosen on first visit, changeable in Settings. |
+| **Deploy** | Every push to `main` is built and published by GitHub Actions (Settings > Pages > Source = *GitHub Actions*). |
+| **Browsers** | Tested mainly on Chrome / Firefox. If you see an old version, hard-refresh (Ctrl+Shift+R / clear site data); the version is shown next to the name in the header. |
+| **License / credit** | MIT. Based on [UncertainProd/FNF-Spritesheet-XML-generator-Web](https://github.com/UncertainProd/FNF-Spritesheet-XML-generator-Web). |
+
+---
+
 # FnF-Spritesheet-and-XML-Maker-Web
 An (experimental) online version of the [FnF-Spritesheet-and-XML-Maker](https://github.com/UncertainProd/FnF-Spritesheet-and-XML-Maker), A Friday Night Funkin' mod making helper tool that allows you to generate XML files and spritesheets from individual pngs. This is a free and open-source mini-replacement tool to the "Generate Spritesheet" functionality in Adobe Animate/Flash
 
-### This tool can be used online by following [this link](https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web). Tested mainly on Chrome and Firefox browsers
+### Upstream project: the original (non-redesigned) online tool is [here](https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web).
 
 
 
@@ -134,6 +151,17 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 
 ### v1.6.1
 - Checkbox resting states are now plain still images from the atlas (checked = last "turn on" frame, unchecked = "turn off idle", white or black by theme). They stay until the next click; the sprite strip is only used while the transition plays.
+
+## v1.8.0 - Mobile UI, usability first
+Phone layout (width < 640 px, or a phone held sideways: height <= 480 px) was rebuilt as a one-column workspace. Tablet and desktop keep every feature.
+- **Workspace**: slim status row (frame / selected counts, **Undo / Redo**, Settings) on top, the frame grid takes all remaining height, **bottom navigation** (Add / Edit / Preview / XML / Export) sits *in* the layout, so it never covers the frames; safe areas respected. Landscape phones get the same tools as a rail on the right.
+- **Bottom sheets** instead of large dialogs: Add (PNGs / ZIP / spritesheet = asset browser), Edit (selection, prefix, clone, delete, order = inspector), Export (character name, XML / PNG sequence, export settings), Settings and the small prompts. Each fits the screen and scrolls inside.
+- **Preview** is a full-screen page with a **Back** button: big stage, a horizontal swipeable **frame strip** (tap = show that frame), Prev / Play-Pause / Next, and a collapsible **Controls** panel (prefix, FPS, preview scale, Fit). Open/closed state is remembered (`localStorage`, optional). The preview scale only changes how the preview is drawn, never the image or export size.
+- **XML Inspector** is full screen on phones with a Back button.
+- **Undo / Redo** (new, all layouts): add images / ZIP / spritesheet, delete, clone, move, sort, set prefix and XML Inspector edits (up to 40 steps). Selection changes are not part of the history.
+- Export needs a character name; the sheet says so and enables the buttons once it is filled.
+- The site address is also in *Settings*.
+- Limits: tested with Playwright (Chromium, touch + mobile emulation) at 390x844, 360x740, 844x390 and 667x375 against a stubbed WASM module; not tested on real devices, and the real WASM export is only built by GitHub Actions.
 
 ## v1.7.0 - Real trimmed exports, size labels, motion system
 - **Fix:** *Generate PNG sequence* re-created every frame at the original canvas (e.g. 512 x 512) even after Auto-Trim. It now exports the real trimmed pixels (e.g. 180 x 240) plus an `offsets.csv` (file, width, height, frameX, frameY, frameWidth, frameHeight) so no position data is lost. Settings > *PNG sequence export* can switch back to full-size frames. The sprite sheet atlas (PNG + XML) already used the trimmed pixels; both are now covered by tests that read the real PNG sizes from the generated ZIP. Frames in the sequence are written in the order they were added.

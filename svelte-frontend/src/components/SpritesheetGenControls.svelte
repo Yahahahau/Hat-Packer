@@ -14,6 +14,9 @@
     import SettingsModal from './SettingsModal.svelte';
     import DropUpMenu from './DropUpMenu.svelte';
     import Icon from './Icon.svelte';
+    import { layoutClass } from '../device';
+    import { persisted } from '../persist';
+    import { recordHistory, beginPending, endPending, undo, redo, historyState } from '../history';
     import type { GrowingPacker } from '../../../rust-img-lib/Cargo.toml';
 
     export let wasm: Wasm_T;
@@ -67,6 +70,7 @@
 
     async function addPngFiles(files: File[], skipped: string[], skipDuplicates = true): Promise<number>
     {
+        if(files.length > 0) recordHistory('Add images');
         const existing = new Set($spriteframes.filter((f) => f.type === 'single_frame').map((f) => fileKey(f.imgfileref)));
         let added = 0;
         trimmedCount = 0;
@@ -233,6 +237,7 @@
     {
         const arr = [ ...$spriteframes ];
         if(!arr.some((f) => f.selected)) return;
+        recordHistory('Move frames');
         if(mode === 'start' || mode === 'end')
         {
             const sel = arr.filter((f) => f.selected);
@@ -260,6 +265,7 @@
     // explicit, user-triggered only: natural numeric sort of all frames by file / animation name
     function sortAllByName()
     {
+        recordHistory('Sort by name');
         const nameOf = (f: SpriteFrameData) => (f.type === 'single_frame') ? f.imgfileref.name : f.animationPrefix;
         spriteframes.set([ ...$spriteframes ].sort((a, b) => naturalCompare(nameOf(a), nameOf(b))));
     }
@@ -317,6 +323,7 @@
             addedTextures.push(newFrame);
         }
 
+        recordHistory('Add spritesheet');
         spriteframes.update((prev) => [...prev, ...addedTextures]);
         spritesheet_map.update((prev) => {
             const [data, count] = prev.get(imgHash);
@@ -333,6 +340,8 @@
     function setAnimationPrefix(prefix: string)
     {
         // for each selected, change it's animation prefix
+        if(!$spriteframes.some((f) => f.selected)) return;
+        recordHistory('Set animation prefix');
         for(let i = 0; i < $spriteframes.length; i++)
         {
             let spr = $spriteframes[i];
@@ -397,6 +406,8 @@
 
     function deleteSelection()
     {
+        if(!$spriteframes.some((f) => f.selected)) return;
+        recordHistory('Delete frames');
         // backward iteration cuz indices get messed up if we don't do that
         for (let i = $spriteframes.length - 1; i >= 0; i--)
         {
@@ -432,6 +443,8 @@
 
     function cloneSelection()
     {
+        if(!$spriteframes.some((f) => f.selected)) return;
+        recordHistory('Clone frames');
         for (let i = 0; i < $spriteframes.length; i++)
         {
             const elem = $spriteframes[i];
@@ -623,6 +636,35 @@
         });
     }
 
+
+    // ---------- phone workspace: bottom navigation + bottom sheets ----------
+    let addSheet = false;
+    let editSheet = false;
+    let exportSheet = false;
+    $: isPhone = $layoutClass === 'phone';
+    // which sheet / view is open decides the highlighted nav item (remembered: the last tool panel used)
+    const lastNav = persisted<string>('phoneNav', 'frames');
+    function closeSheets() { addSheet = false; editSheet = false; exportSheet = false; }
+    function openSheet(which: 'add' | 'edit' | 'export')
+    {
+        closeSheets();
+        addSheet = which === 'add'; editSheet = which === 'edit'; exportSheet = which === 'export';
+        lastNav.set(which);
+    }
+    // run an action after the sheet has closed, so dialogs never stack on top of a sheet
+    function fromSheet(fn: () => void) { closeSheets(); setTimeout(fn, 0); }
+
+    function doUndo() { const l = undo(); if(l) setStatus('info', `Undid: ${l}`); }
+    function doRedo() { const l = redo(); if(l) setStatus('info', `Redid: ${l}`); }
+
+    // edits made in the XML Inspector are one undo step (kept only if something really changed)
+    let xmlWasOpen = false;
+    $: {
+        if(xmlViewShown && !xmlWasOpen) beginPending('Edit in XML Inspector');
+        if(!xmlViewShown && xmlWasOpen) endPending();
+        xmlWasOpen = xmlViewShown;
+    }
+
     function activateSelectRange()
     {
         rangeSelectionMode = true;
@@ -672,6 +714,7 @@
 <AnimationView bind:showView={animationViewShown} />
 <XmlTableView bind:showView={xmlViewShown} />
 
+{#if !isPhone}
 <!-- top bar: bring frames in, look at them -->
 <div id="controls-top" class="bar">
     <div class="group">
@@ -683,6 +726,8 @@
         <strong>{frameCount}</strong> frame{frameCount === 1 ? '' : 's'}
         <span class="dot">&middot;</span>
         <strong>{selectedCount}</strong> selected
+        <button type="button" class="btn-flat hist-btn" disabled={!$historyState.canUndo} title="Undo" aria-label="Undo" on:click={doUndo}><Icon name="undo" size={18} /></button>
+        <button type="button" class="btn-flat hist-btn" disabled={!$historyState.canRedo} title="Redo" aria-label="Redo" on:click={doRedo}><Icon name="redo" size={18} /></button>
     </div>
     <div class="group">
         <DropUpMenu buttonText="View" icon="eye" direction="down" align="right">
@@ -693,6 +738,21 @@
     </div>
 </div>
 
+{/if}
+
+{#if isPhone}
+<!-- phone: one slim status row (work status + undo/redo + settings) ... -->
+<div id="phone-bar" role="toolbar" aria-label="Status and history">
+    <div class="counts" aria-live="polite">
+        {#if busy}<span class="busy-dot" aria-hidden="true"></span>Working... {:else}
+        <strong>{frameCount}</strong> frame{frameCount === 1 ? '' : 's'} <span class="dot">&middot;</span> <strong>{selectedCount}</strong> selected{/if}
+    </div>
+    <button type="button" class="btn-flat tool-btn" disabled={!$historyState.canUndo} aria-label="Undo{$historyState.undoLabel ? ': ' + $historyState.undoLabel : ''}" on:click={doUndo}><Icon name="undo" size={20} /></button>
+    <button type="button" class="btn-flat tool-btn" disabled={!$historyState.canRedo} aria-label="Redo{$historyState.redoLabel ? ': ' + $historyState.redoLabel : ''}" on:click={doRedo}><Icon name="redo" size={20} /></button>
+    <button type="button" class="btn-flat tool-btn" aria-label="Settings" on:click={()=>{ settingsModalShown = true; }}><Icon name="settings" size={20} /></button>
+</div>
+{/if}
+
 {#if statusMsg}
     <div id="status-line" in:toastIn out:toastOut class="status-{statusKind}" role={statusKind === 'error' ? 'alert' : 'status'}>
         <Icon name={statusKind === 'error' ? 'alert' : 'check'} size={18} />
@@ -701,6 +761,7 @@
     </div>
 {/if}
 
+{#if !isPhone}
 <!-- bottom bar: act on the selection, export -->
 <div id="controls" class="bar">
     <div class="group">
@@ -730,6 +791,69 @@
         </DropUpMenu>
     </div>
 </div>
+
+{/if}
+
+{#if isPhone}
+<!-- ... and a bottom navigation that sits IN the layout (never over the frames) -->
+<nav id="phone-nav" aria-label="Main tools">
+    <button type="button" class:on={addSheet} on:click={()=>{ openSheet('add') }} disabled={importing}><Icon name="plus" size={22} /><span>Add</span></button>
+    <button type="button" class:on={editSheet} on:click={()=>{ openSheet('edit') }} disabled={frameCount < 1}><Icon name="edit" size={22} /><span>Edit</span></button>
+    <button type="button" on:click={()=>{ closeSheets(); animationViewShown = true; }} disabled={frameCount < 1}><Icon name="play" size={22} /><span>Preview</span></button>
+    <button type="button" on:click={()=>{ closeSheets(); xmlViewShown = true; }} disabled={frameCount < 1}><Icon name="code" size={22} /><span>XML</span></button>
+    <button type="button" class="nav-export" class:on={exportSheet} on:click={()=>{ openSheet('export') }} disabled={busy}><Icon name="download" size={22} /><span>{busy ? 'Working' : 'Export'}</span></button>
+</nav>
+
+<!-- Asset browser: where frames come from -->
+<Modal bind:showModal={addSheet} sheet>
+    <p slot="header">Add frames</p>
+    <div class="sheet-list">
+        <button class="btn-primary" on:click={()=>{ fromSheet(()=>openFileDialog(onPNGAdd, 'image/png', true)) }}><Icon name="image-plus" /> Add PNGs</button>
+        <button on:click={()=>{ fromSheet(()=>openFileDialog(onZipAdd, '.zip,application/zip,application/x-zip-compressed', false)) }}><Icon name="archive" /> Add ZIP</button>
+        <button on:click={()=>{ fromSheet(()=>{ spritesheetXMLModalShown = true }) }}><Icon name="sheet" /> Add Spritesheet + XML</button>
+    </div>
+</Modal>
+
+<!-- Inspector: act on the selected frames -->
+<Modal bind:showModal={editSheet} sheet>
+    <p slot="header">Edit frames <span class="sheet-count">{selectedCount} of {frameCount} selected</span></p>
+    <div class="sheet-grid">
+        <button on:click={()=>{ onSelectAll(true) }}><Icon name="check" /> Select all</button>
+        <button on:click={()=>{ onSelectAll(false) }}><Icon name="x" /> Clear selection</button>
+        <button disabled={selectedCount < 1} on:click={()=>{ fromSheet(()=>{ animationPrefixModalShown = true }) }}><Icon name="tag" /> Animation prefix</button>
+        <button on:click={()=>{ fromSheet(activateSelectRange) }}><Icon name="selection" /> Select range</button>
+        <button disabled={selectedCount < 1} on:click={cloneSelection}><Icon name="copy" /> Clone</button>
+        <button class="menu-danger" disabled={selectedCount < 1} on:click={()=>{ deleteSelection(); closeSheets(); }}><Icon name="trash" /> Delete</button>
+    </div>
+    <p class="sheet-label">Order</p>
+    <div class="sheet-grid four">
+        <button disabled={selectedCount < 1} aria-label="Move selection to start" on:click={()=>{ moveSelection('start') }}><Icon name="chevrons-left" /></button>
+        <button disabled={selectedCount < 1} aria-label="Move selection earlier" on:click={()=>{ moveSelection('left') }}><Icon name="arrow-left" /></button>
+        <button disabled={selectedCount < 1} aria-label="Move selection later" on:click={()=>{ moveSelection('right') }}><Icon name="arrow-right" /></button>
+        <button disabled={selectedCount < 1} aria-label="Move selection to end" on:click={()=>{ moveSelection('end') }}><Icon name="chevrons-right" /></button>
+    </div>
+    <div class="sheet-list">
+        <button on:click={()=>{ sortAllByName(); closeSheets(); }}><Icon name="sort" /> Sort all by name (1, 2, 10)</button>
+    </div>
+</Modal>
+
+<!-- Export options fit the screen; the heavy work starts from here -->
+<Modal bind:showModal={exportSheet} sheet>
+    <p slot="header">Export</p>
+    <label class="field" for="export-char-name">
+        <span>Character name (used for the file names)</span>
+        <input id="export-char-name" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Character Name" bind:value={charname} />
+    </label>
+    {#if !charname || charname.trim() === ''}
+        <p class="sheet-hint" role="status">Type a character name to enable export.</p>
+    {/if}
+    <div class="sheet-list">
+        <button class="btn-primary" disabled={frameCount < 1 || busy || !charname || charname.trim() === ''} on:click={()=>{ fromSheet(()=>{ addImagesToPacker(generateSpritesheetXML).then(()=>{}) }) }}><Icon name="code" /> Generate spritesheet + XML</button>
+        <button disabled={frameCount < 1 || busy || !charname || charname.trim() === ''} on:click={()=>{ fromSheet(()=>{ addImagesToPacker(generateImageSequence).then(()=>{}) }) }}><Icon name="film" /> Generate PNG sequence</button>
+        <button on:click={()=>{ fromSheet(()=>{ settingsModalShown = true }) }}><Icon name="settings" /> Export settings (trim, padding, ...)</button>
+    </div>
+</Modal>
+{/if}
 
 <style>
     /* `order` positions these among the frame panel (order 2) inside the pane's flex column */
@@ -886,6 +1010,54 @@
         font-size: 0.9rem;
         color: var(--text-muted);
     }
+
+
+    .hist-btn { width: 32px; min-height: 32px; height: 32px; padding: 0; margin-left: 4px; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
+    .hist-btn:disabled { opacity: 0.35; }
+
+    /* ----- phone workspace ----- */
+    #phone-bar { order: 0; display: flex; align-items: center; gap: 2px; padding: 0 0 0 4px; min-height: 40px; flex: none; }
+    #phone-bar .counts { flex: 1 1 auto; text-align: left; font-size: 0.85rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .tool-btn { width: 44px; min-height: 40px; height: 40px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+    .tool-btn:disabled { opacity: 0.35; }
+    .busy-dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--accent); animation: busy-pulse 0.9s ease-in-out infinite alternate; }
+    @keyframes busy-pulse { from { opacity: 0.3; } to { opacity: 1; } }
+
+    #phone-nav {
+        order: 4;
+        flex: none;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+        padding: 6px 6px 11px;
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+    }
+    #phone-nav button {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 2px; min-height: 52px; padding: 4px 2px; font-size: 0.72rem; line-height: 1.1;
+    }
+    #phone-nav button.on { border-color: var(--accent); color: var(--accent); }
+    #phone-nav .nav-export { background: var(--accent); color: var(--accent-contrast); }
+
+    .sheet-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 4px; }
+    .sheet-list button { display: flex; align-items: center; justify-content: flex-start; gap: 12px; min-height: 52px; font-size: 1rem; text-align: left; }
+    .sheet-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px; }
+    .sheet-grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .sheet-grid button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 6px; font-size: 0.9rem; }
+    .sheet-hint { margin: 8px 0 0; font-size: 0.85rem; color: var(--text-muted); }
+    .sheet-label { margin: 10px 0 6px; font-size: 0.8rem; color: var(--text-muted); }
+    .sheet-count { font-weight: 400; font-size: 0.8rem; color: var(--text-muted); margin-left: 8px; }
+
+    /* landscape phone: tool rail on the right instead of a bottom bar (keeps the frames tall) */
+    :global(html[data-layout="phone"][data-orient="landscape"]) #phone-nav {
+        grid-template-columns: 1fr;
+        grid-auto-rows: minmax(0, 1fr);
+        padding: 4px 4px 9px;
+        gap: 4px;
+    }
+    :global(html[data-layout="phone"][data-orient="landscape"]) #phone-nav button { min-height: 0; flex-direction: column; font-size: 0.66rem; }
 
     /* narrow tablets / phones: let the count drop to its own row, keep buttons large */
     @media screen and (max-width: 720px) {

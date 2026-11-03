@@ -76,7 +76,7 @@
 </div>
 
 
-<SpritesheetGenControls bind:rangeSelectionMode {charname} wasm={wasm} />
+<SpritesheetGenControls bind:rangeSelectionMode bind:charname wasm={wasm} />
 
 
 <style>
