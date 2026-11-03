@@ -162,6 +162,7 @@ Phone layout (width < 640 px, or a phone held sideways: height <= 480 px) was re
 - Export needs a character name; the sheet says so and enables the buttons once it is filled.
 - The site address is also in *Settings*.
 - Limits: tested with Playwright (Chromium, touch + mobile emulation) at 390x844, 360x740, 844x390 and 667x375 against a stubbed WASM module; not tested on real devices, and the real WASM export is only built by GitHub Actions.
+- Animation preview default speed is now 18 FPS (was 24); still adjustable in Controls.
 
 ## v1.7.0 - Real trimmed exports, size labels, motion system
 - **Fix:** *Generate PNG sequence* re-created every frame at the original canvas (e.g. 512 x 512) even after Auto-Trim. It now exports the real trimmed pixels (e.g. 180 x 240) plus an `offsets.csv` (file, width, height, frameX, frameY, frameWidth, frameHeight) so no position data is lost. Settings > *PNG sequence export* can switch back to full-size frames. The sprite sheet atlas (PNG + XML) already used the trimmed pixels; both are now covered by tests that read the real PNG sizes from the generated ZIP. Frames in the sequence are written in the order they were added.

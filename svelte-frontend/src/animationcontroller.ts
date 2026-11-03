@@ -25,7 +25,7 @@ export class AnimationController {
         this.prev = null;
         this.ticks = 0;
         this.animId = null;
-        this.fps = 24;
+        this.fps = 18;
         this.animationScale = 1;
 
         this.isPlaying = false;
