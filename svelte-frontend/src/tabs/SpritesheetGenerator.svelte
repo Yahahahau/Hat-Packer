@@ -1,5 +1,6 @@
 <script lang="ts">
     import SpriteFrame from '../components/SpriteFrame.svelte';
+    import DeskScene from '../components/DeskScene.svelte';
     import Icon from '../components/Icon.svelte';
     import SpritesheetGenControls from '../components/SpritesheetGenControls.svelte';
     import type { Wasm_T } from '../global';
@@ -68,7 +69,7 @@
     {/each}
     {#if $spriteframes.length === 0}
         <div id="empty-state">
-            <Icon name="image-plus" size={40} />
+            <DeskScene />
             <p><strong>No frames yet</strong></p>
             <p>Use <em>Add PNGs</em> to import images, or <em>Add Spritesheet</em> to import an existing spritesheet + XML.</p>
         </div>
@@ -95,9 +96,10 @@
         align-content: start;
         gap: 8px;
         padding: 8px;
+        padding-bottom: 12px;
         background-color: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
+        border: 2px solid var(--outline);
+        border-radius: 16px;
     }
 
     #sprite-frames.range-mode {
@@ -121,11 +123,12 @@
         align-items: center;
         justify-content: center;
         gap: 2px;
-        padding: 48px 16px;
+        padding: 28px 16px;
         text-align: center;
         color: var(--text-muted);
     }
 
+    #empty-state { --scene-w: min(66vw, 260px); }
     #empty-state p {
         margin: 4px 0 0;
         max-width: 34rem;

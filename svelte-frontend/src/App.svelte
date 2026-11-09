@@ -8,18 +8,17 @@
     import SpritesheetGenerator from "./tabs/SpritesheetGenerator.svelte";
 	import type { Wasm_T } from './global';
 	import { APP_VERSION } from 'virtual:app-version';
+	import { getTheme, applyTheme } from './theme';
 
 	export let wasm: Wasm_T;
 	let characterName: string;
 
 	let curChoice = "spsh";
-	let darkMode = true;
+	let darkMode = getTheme() === 'dark';
 
 	function toggleTheme()
 	{
-		// body + html both carry the class so the page background never mismatches
-		document.body.classList.toggle('light-mode');
-		document.documentElement.classList.toggle('light-mode');
+		applyTheme(darkMode ? 'dark' : 'light');
 	}
 
 	// let test = wasm.greet("Friend!!");
@@ -90,6 +89,12 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 6px 12px;
+		padding: 6px 10px 2px;
+		background-color: var(--surface-3);
+		border: 2px solid var(--outline);
+		border-radius: 16px;
+		box-shadow: 0 var(--btn-depth) 0 var(--outline);
+		margin-bottom: var(--btn-depth);
 	}
 
 	#brand {
@@ -196,7 +201,7 @@
 
 	.switch-icon {
 		display: inline-flex;
-		color: var(--accent);
+		color: var(--accent-text);
 	}
 
 	.switch-text {

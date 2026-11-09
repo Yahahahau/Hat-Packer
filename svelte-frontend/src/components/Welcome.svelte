@@ -1,5 +1,6 @@
 <script lang="ts">
     import Icon from './Icon.svelte';
+    import DeskScene from './DeskScene.svelte';
     import { APP_NAME, LOGO_URL } from '../branding';
     import { deviceChoice } from '../device';
     import type { DeviceChoice } from '../device';
@@ -15,6 +16,7 @@
 
 <div id="welcome">
     <div id="welcome-inner">
+        <div class="w-scene"><DeskScene /></div>
         <header class="w-head">
             <img class="w-logo" src={LOGO_URL} alt="" width="160" height="94" draggable="false" />
             <h1>{APP_NAME}</h1>
@@ -66,6 +68,8 @@
         animation: w-rise 0.3s cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
     }
 
+    .w-scene { width: min(300px, 62vw); max-height: 26vh; display: flex; justify-content: center; }
+    .w-scene :global(.desk-scene) { max-height: 26vh; }
     .w-logo {
         width: clamp(96px, 28vw, 160px);
         height: auto;
@@ -126,7 +130,7 @@
         box-shadow: 0 calc(var(--btn-depth) - var(--btn-press)) 0 var(--btn-edge), inset 0 2px 0 rgba(255, 255, 255, 0.14);
     }
 
-    .dc-icon { color: var(--accent); display: inline-flex; }
+    .dc-icon { color: var(--accent-text); display: inline-flex; }
     .dc-title { font-size: 1.3rem; }
     .dc-text { font-family: var(--font-read); font-size: 0.88rem; color: var(--text-muted); letter-spacing: 0; }
     .dc-pick {

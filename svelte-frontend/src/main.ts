@@ -4,10 +4,12 @@ import './styles.css';
 import { initUiSounds } from './sounds';
 import { initLayout } from './device';
 import { initAnimatedChecks } from './animcheck';
+import { initTheme } from './theme';
 
 // iOS Safari only triggers :active (the pressed-button look) when some touch listener exists.
 document.addEventListener('touchstart', () => {}, { passive: true });
 
+initTheme();
 initUiSounds();
 initLayout();
 initAnimatedChecks();

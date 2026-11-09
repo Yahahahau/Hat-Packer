@@ -143,7 +143,7 @@
 
 <style>
     .about-link { margin: 12px 0 0; font-size: 0.8rem; color: var(--text-muted); overflow-wrap: anywhere; }
-    .about-link a { color: var(--accent); }
+    .about-link a { color: var(--accent-text); }
     #modal-content {
         display: flex;
         flex-direction: column;

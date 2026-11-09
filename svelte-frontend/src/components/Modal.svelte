@@ -75,12 +75,12 @@
 
 <style>
 	dialog {
-		border: 1px solid var(--border-strong);
-		border-radius: 14px;
+		border: 2px solid var(--outline);
+		border-radius: 18px;
 		padding: 0;
 		background-color: var(--surface);
 		color: var(--text);
-		box-shadow: var(--shadow);
+		box-shadow: 0 6px 0 var(--outline), var(--shadow);
 		width: min(var(--modal-w), calc(100vw - 2 * var(--modal-gutter)));
 		max-width: none;
 		max-height: calc(100dvh - 2 * var(--modal-gutter));
@@ -199,6 +199,8 @@
 		border-radius: 16px 16px 0 0;
 		border-bottom: 0;
 		animation-name: sheet-in;
+		animation-duration: 420ms;
+		animation-timing-function: var(--ease-spring);
 	}
 	:global(html[data-layout="phone"]) dialog:not(.full) .modal-body { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
 	:global(html[data-layout="phone"]) dialog:not(.full) .modal-footer { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
@@ -213,7 +215,7 @@
 	:global(html[data-layout="phone"]) dialog.full .modal-body { padding: 8px 10px; }
 	:global(html[data-layout="phone"]) dialog.full .modal-header > .icon-btn { display: none; }
 	:global(html[data-layout="phone"]) dialog.full .modal-title { flex: 1 1 auto; }
-	@keyframes sheet-in { from { opacity: 0.6; transform: translateY(40px); } to { opacity: 1; transform: none; } }
+	@keyframes sheet-in { from { opacity: 0.4; transform: translateY(70px); } to { opacity: 1; transform: none; } }
 	@keyframes sheet-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(40px); } }
 	@media (prefers-reduced-motion: reduce) {
 		dialog[open], dialog[open]::backdrop, dialog.closing, dialog.closing::backdrop { animation: none; }

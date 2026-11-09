@@ -1,31 +1,33 @@
 /* ---------- Design tokens ---------- */
+/* "Lavender Desk": light is the default look, dark is the same design on ink */
 :root {
-    --bg: #0d1420;
-    /* static, very soft blue glows behind the UI (no animation, no extra cost) */
+    --bg: #141a2b;
     --bg-image:
-        radial-gradient(900px 520px at 12% -8%, rgba(96, 156, 255, 0.16), transparent 70%),
-        radial-gradient(800px 560px at 100% 105%, rgba(70, 140, 235, 0.12), transparent 70%);
-    --surface: #161a22;
-    --surface-2: #1d222c;
-    --surface-3: #262c38;
-    --border: #2f3644;
-    --border-strong: #46506a;
+        radial-gradient(900px 520px at 8% -10%, rgba(184, 148, 247, 0.22), transparent 70%),
+        radial-gradient(800px 560px at 100% 105%, rgba(249, 228, 255, 0.07), transparent 70%);
+    --surface: #1b2236;
+    --surface-2: #222a42;
+    --surface-3: #2d2848;   /* the "pink" panel colour on ink */
+    --border: #333c5c;
+    --border-strong: #6d78a6;
+    --outline: #8d86c8;     /* outline of cards, header, sheets */
 
-    --text: #e8ebf2;
-    --text-muted: #9ba5b8;
+    --text: #ecebf7;
+    --text-muted: #a4a9c4;
 
-    --accent: #7b9bff;
-    --accent-hover: #93adff;
-    --accent-soft: rgba(123, 155, 255, 0.16);
-    --accent-contrast: #0a1028;
+    --accent: #b894f7;
+    --accent-hover: #caadfa;
+    --accent-soft: rgba(184, 148, 247, 0.2);
+    --accent-contrast: #1b1233;
+    --accent-text: #c6a8fa;   /* accent used as text colour */
 
     --danger: #ff7b8a;
     --danger-soft: rgba(255, 123, 138, 0.15);
     --success: #5fd39b;
 
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-    --checker-a: #1a1e27;
-    --checker-b: #212631;
+    --checker-a: #1f2539;
+    --checker-b: #272f48;
 
     /* two font roles: UI = custom display font (titles, labels, buttons); read = system font (text, inputs, tables, XML) */
     --font-ui: "PhantomMuff", "Noto Sans Thai", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -34,11 +36,11 @@
     /* chunky 3D buttons */
     --btn-depth: 4px;          /* height of the solid bottom edge */
     --btn-press: 3px;          /* how far a button sinks while pressed (edge shrinks by the same amount) */
-    --btn-face: #2b3342;
-    --btn-face-hover: #343d4f;
-    --btn-edge: #0b0e14;
+    --btn-face: #2a3350;
+    --btn-face-hover: #343f62;
+    --btn-edge: #0a0e1a;
     --btn-text: var(--text);
-    --btn-primary-edge: #3f5bb8;
+    --btn-primary-edge: #6a47b5;
     --btn-danger-face: #3a2530;
     --btn-danger-edge: #12080c;
 
@@ -51,6 +53,8 @@
     --dur-menu: 170ms;    /* dropdown / tooltip 140-200 */
     --dur-modal: 210ms;   /* modal / panel 180-240 */
     --dur-tab: 220ms;     /* tab / main content 180-260 */
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);   /* playful overshoot: pops, hops, sheets */
+    --dur-spring: 480ms;
 
     /* layout tokens (overridden per breakpoint / device below) */
     --pad: 6px;            /* outer padding */
@@ -71,39 +75,42 @@
     color-scheme: dark;
 }
 
+/* the reference look: lavender #b08df5, pink panels, ink outlines */
 :root.light-mode, .light-mode {
-    --bg: #e3eefb;
+    --bg: #f6f2fc;
     --bg-image:
-        radial-gradient(900px 520px at 12% -8%, rgba(120, 180, 255, 0.38), transparent 70%),
-        radial-gradient(800px 560px at 100% 105%, rgba(140, 195, 250, 0.32), transparent 70%);
+        radial-gradient(900px 520px at 6% -8%, rgba(249, 228, 255, 0.95), transparent 70%),
+        radial-gradient(800px 560px at 100% 105%, rgba(176, 141, 245, 0.22), transparent 70%);
     --surface: #ffffff;
-    --surface-2: #f4f6fb;
-    --surface-3: #e6eaf3;
-    --border: #d3d9e6;
-    --border-strong: #9aa6c0;
+    --surface-2: #fbf7ff;
+    --surface-3: #f9e4ff;
+    --border: #e0d3f2;
+    --border-strong: #1c2433;
+    --outline: #1c2433;
 
-    --text: #1a2030;
-    --text-muted: #556078;
+    --text: #1c2433;
+    --text-muted: #5d6580;
 
-    --accent: #2c59cf;
-    --accent-hover: #2349ad;
-    --accent-soft: rgba(44, 89, 207, 0.12);
-    --accent-contrast: #ffffff;
+    --accent: #b08df5;
+    --accent-hover: #c1a3f8;
+    --accent-soft: rgba(176, 141, 245, 0.24);
+    --accent-contrast: #1c2433;   /* ink on lavender: readable (white on lavender is not) */
+    --accent-text: #6a3fcf;
 
     --danger: #c2283a;
     --danger-soft: rgba(194, 40, 58, 0.1);
     --success: #17814f;
 
-    --shadow: 0 10px 30px rgba(30, 40, 70, 0.18);
+    --shadow: 0 10px 30px rgba(60, 40, 110, 0.16);
 
     --btn-face: #ffffff;
-    --btn-face-hover: #f3f6fd;
-    --btn-edge: #aab4cc;
-    --btn-primary-edge: #1a3b94;
+    --btn-face-hover: #f9e4ff;
+    --btn-edge: #1c2433;
+    --btn-primary-edge: #1c2433;
     --btn-danger-face: #fff0f2;
-    --btn-danger-edge: #d49aa3;
-    --checker-a: #f1f3f9;
-    --checker-b: #e4e8f1;
+    --btn-danger-edge: #1c2433;
+    --checker-a: #f6f0fd;
+    --checker-b: #ebe0fa;
 
     color-scheme: light;
 }
@@ -484,3 +491,54 @@ html[data-layout="phone"] #status-line { font-size: 0.8rem; padding: 4px 4px 4px
 
 /* ---------- Type scale (compact, desktop/tablet): body 15px, buttons ~13px, small text ~12px ---------- */
 html[data-layout="desktop"], html[data-layout="tablet"] { font-size: 15px; }
+
+/* ---------- Playful motion (draw-on lines, springy pops). Skipped completely for reduced motion. ---------- */
+@keyframes hp-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes hp-pop { from { opacity: 0; transform: scale(0.2) rotate(-12deg); } to { opacity: 1; transform: none; } }
+@keyframes hp-grow { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes hp-float { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-7px) rotate(2deg); } }
+@keyframes hp-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.35); } }
+@keyframes hp-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@keyframes hp-wobble { 0%, 86%, 100% { transform: rotate(0); } 90% { transform: rotate(-5deg); } 94% { transform: rotate(4deg); } 97% { transform: rotate(-2deg); } }
+@keyframes hp-hop { 0% { transform: translateY(0) scale(1); } 35% { transform: translateY(-7px) scale(1.18); } 65% { transform: translateY(1px) scale(0.94); } 100% { transform: none; } }
+@keyframes hp-card-pop { from { opacity: 0; transform: translateY(18px) scale(0.86) rotate(-3deg); } to { opacity: 1; transform: none; } }
+@keyframes hp-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes hp-header-in { from { opacity: 0; transform: translateY(-16px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes hp-logo-hop { 0% { transform: none; } 30% { transform: translateY(-8px) rotate(-10deg); } 60% { transform: translateY(0) rotate(7deg); } 100% { transform: none; } }
+
+@media (prefers-reduced-motion: no-preference) {
+    /* new frame cards spring in one after another (only the first dozen are staggered) */
+    #sprite-frames > .frame-container { animation: hp-card-pop var(--dur-spring) var(--ease-spring) backwards; }
+    #sprite-frames > .frame-container:nth-child(2) { animation-delay: 45ms; }
+    #sprite-frames > .frame-container:nth-child(3) { animation-delay: 90ms; }
+    #sprite-frames > .frame-container:nth-child(4) { animation-delay: 135ms; }
+    #sprite-frames > .frame-container:nth-child(5) { animation-delay: 180ms; }
+    #sprite-frames > .frame-container:nth-child(6) { animation-delay: 225ms; }
+    #sprite-frames > .frame-container:nth-child(7) { animation-delay: 270ms; }
+    #sprite-frames > .frame-container:nth-child(8) { animation-delay: 315ms; }
+    #sprite-frames > .frame-container:nth-child(9) { animation-delay: 360ms; }
+    #sprite-frames > .frame-container:nth-child(10) { animation-delay: 405ms; }
+    #sprite-frames > .frame-container:nth-child(n+11) { animation-delay: 450ms; }
+
+    #app-header { animation: hp-header-in 0.5s var(--ease-spring) backwards; }
+    #brand-logo { animation: hp-logo-hop 0.7s var(--ease-spring) 0.4s backwards; transform-origin: 50% 100%; }
+    #brand-logo:hover, #brand-logo:active { animation: hp-logo-hop 0.7s var(--ease-spring); }
+
+    /* the selected mode gets a hand-drawn underline that is drawn on when it is chosen */
+    .app-tab { position: relative; }
+    .app-tab.selected::after {
+        content: "";
+        position: absolute;
+        left: 14%; right: 14%; bottom: 1px; height: 5px;
+        background: currentColor;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='6' viewBox='0 0 16 6'%3E%3Cpath d='M0 3c2-3 4-3 6 0s4 3 6 0 3-2 4-1' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center / 16px 6px;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='6' viewBox='0 0 16 6'%3E%3Cpath d='M0 3c2-3 4-3 6 0s4 3 6 0 3-2 4-1' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center / 16px 6px;
+        animation: hp-reveal 0.55s var(--ease-in) backwards;
+        pointer-events: none;
+    }
+    .strip-item.on { animation: hp-hop 0.5s var(--ease-spring); }
+    #empty-state { animation: hp-card-pop 0.6s var(--ease-spring) backwards; }
+    .toast-spring, #status-line { animation: hp-card-pop 0.45s var(--ease-spring) backwards; }
+}
+/* the squiggle must not eat the label of a tab that is short on room */
+.app-tab.selected { padding-top: 0; padding-bottom: 8px; }

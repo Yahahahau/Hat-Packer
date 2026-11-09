@@ -152,6 +152,13 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 ### v1.6.1
 - Checkbox resting states are now plain still images from the atlas (checked = last "turn on" frame, unchecked = "turn off idle", white or black by theme). They stay until the next click; the sprite strip is only used while the transition plays.
 
+## v1.9.0 - "Lavender Desk" skin + playful motion
+New look based on the workspace-booking reference you sent: lavender `#b08df5` accents, pink panels, white cards with ink outlines. Light is now the default theme (dark = the same design on ink; the choice is remembered). Chunky 3D buttons, the two-font system, sounds and animated checkboxes are kept.
+- Header, toolbars, frame grid, sheets, menus and dialogs are outlined cards; selected frames fill with lavender (ink text, because white on lavender is hard to read).
+- **Draw-on illustration** (original: desk, monitor with sprite frames, hat, map pin) on the Welcome screen and in the empty workspace: lines draw themselves, frames pop in with a spring, then the pin floats and the hat wobbles now and then.
+- **Motion**: frame cards spring in one after another, hover tilts them, the selected mode gets a hand-drawn squiggle underline that draws on, bottom-nav icons hop when chosen, sheets bounce in, header drops in, the logo hops. All of this is switched off with *reduce motion*.
+- Limits: checked with Playwright at desktop, tablet and phone sizes in light and dark; not on real devices.
+
 ## v1.8.0 - Mobile UI, usability first
 Phone layout (width < 640 px, or a phone held sideways: height <= 480 px) was rebuilt as a one-column workspace. Tablet and desktop keep every feature.
 - **Workspace**: slim status row (frame / selected counts, **Undo / Redo**, Settings) on top, the frame grid takes all remaining height, **bottom navigation** (Add / Edit / Preview / XML / Export) sits *in* the layout, so it never covers the frames; safe areas respected. Landscape phones get the same tools as a rail on the right.

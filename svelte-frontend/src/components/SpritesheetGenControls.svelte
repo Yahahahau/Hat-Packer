@@ -869,8 +869,8 @@
         gap: 6px 10px;
         padding: 6px 6px 11px;
         background-color: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
+        border: 2px solid var(--outline);
+        border-radius: 16px;
     }
 
     .group {
@@ -1031,14 +1031,15 @@
         gap: 6px;
         padding: 6px 6px 11px;
         background-color: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
+        border: 2px solid var(--outline);
+        border-radius: 16px;
     }
     #phone-nav button {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         gap: 2px; min-height: 52px; padding: 4px 2px; font-size: 0.72rem; line-height: 1.1;
     }
-    #phone-nav button.on { border-color: var(--accent); color: var(--accent); }
+    #phone-nav button.on :global(svg) { animation: hp-hop 0.55s var(--ease-spring); }
+    #phone-nav button.on { border-color: var(--outline); color: var(--text); background-color: var(--accent-soft); }
     #phone-nav .nav-export { background: var(--accent); color: var(--accent-contrast); }
 
     .sheet-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 4px; }
