@@ -1,48 +1,56 @@
 /* ---------- Design tokens ---------- */
-/* "Lavender Desk": light is the default look, dark is the same design on ink */
+/* "Monochrome Editorial": near-black cards, white pills, serif headlines, geometric black/white art.
+   Dark is the reference look and the default; light is the same design inverted. */
 :root {
-    --bg: #141a2b;
+    --bg: #17171a;
     --bg-image:
-        radial-gradient(900px 520px at 8% -10%, rgba(184, 148, 247, 0.22), transparent 70%),
-        radial-gradient(800px 560px at 100% 105%, rgba(249, 228, 255, 0.07), transparent 70%);
-    --surface: #1b2236;
-    --surface-2: #222a42;
-    --surface-3: #2d2848;   /* the "pink" panel colour on ink */
-    --border: #333c5c;
-    --border-strong: #6d78a6;
-    --outline: #8d86c8;     /* outline of cards, header, sheets */
+        radial-gradient(1000px 600px at 0% -10%, rgba(255, 255, 255, 0.05), transparent 70%),
+        radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.35) 50%, transparent 51%),
+        radial-gradient(1px 1px at 68% 14%, rgba(255, 255, 255, 0.25) 50%, transparent 51%),
+        radial-gradient(1px 1px at 86% 61%, rgba(255, 255, 255, 0.3) 50%, transparent 51%),
+        radial-gradient(1px 1px at 31% 78%, rgba(255, 255, 255, 0.25) 50%, transparent 51%),
+        radial-gradient(1px 1px at 52% 92%, rgba(255, 255, 255, 0.3) 50%, transparent 51%);
+    --surface: #1f1f23;
+    --surface-2: #27272c;
+    --surface-3: #303036;
+    --border: #35353b;
+    --border-strong: #5a5a63;
+    --outline: #35353b;     /* hairline around cards, header, sheets */
 
-    --text: #ecebf7;
-    --text-muted: #a4a9c4;
+    --text: #f4f4f5;
+    --text-muted: #8f8f98;
 
-    --accent: #b894f7;
-    --accent-hover: #caadfa;
-    --accent-soft: rgba(184, 148, 247, 0.2);
-    --accent-contrast: #1b1233;
-    --accent-text: #c6a8fa;   /* accent used as text colour */
+    --accent: #f4f4f5;      /* the white pill */
+    --accent-hover: #ffffff;
+    --accent-soft: rgba(255, 255, 255, 0.1);
+    --accent-contrast: #141416;
+    --accent-text: #f4f4f5;
+    --mark: #ff5a5f;        /* the single red detail of the reference (badges, progress) */
 
-    --danger: #ff7b8a;
-    --danger-soft: rgba(255, 123, 138, 0.15);
+    --danger: #ff6b70;
+    --danger-soft: rgba(255, 90, 95, 0.14);
     --success: #5fd39b;
 
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-    --checker-a: #1f2539;
-    --checker-b: #272f48;
+    --shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+    --checker-a: #222226;
+    --checker-b: #2b2b30;
 
-    /* two font roles: UI = custom display font (titles, labels, buttons); read = system font (text, inputs, tables, XML) */
-    --font-ui: "PhantomMuff", "Noto Sans Thai", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --font-read: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Noto Sans Thai", "Helvetica Neue", Arial, sans-serif;
+    /* type: serif headlines + clean sans for everything else + mono for XML and numbers */
+    --font-serif: "Libre Baskerville", "Source Serif 4", Georgia, "Times New Roman", "Noto Serif Thai", serif;
+    --font-ui: "Inter", "Noto Sans Thai", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-read: var(--font-ui);
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
-    /* chunky 3D buttons */
-    --btn-depth: 4px;          /* height of the solid bottom edge */
-    --btn-press: 3px;          /* how far a button sinks while pressed (edge shrinks by the same amount) */
-    --btn-face: #2a3350;
-    --btn-face-hover: #343f62;
-    --btn-edge: #0a0e1a;
+    /* flat pill buttons (the old 3D depth is gone; the variables stay so nothing else breaks) */
+    --btn-depth: 0px;
+    --btn-press: 1px;
+    --btn-face: transparent;
+    --btn-face-hover: rgba(255, 255, 255, 0.1);
+    --btn-edge: #6e6e78;
     --btn-text: var(--text);
-    --btn-primary-edge: #6a47b5;
-    --btn-danger-face: #3a2530;
-    --btn-danger-edge: #12080c;
+    --btn-primary-edge: transparent;
+    --btn-danger-face: rgba(255, 90, 95, 0.1);
+    --btn-danger-edge: rgba(255, 90, 95, 0.55);
 
     /* motion tokens: one system for the whole UI */
     --ease-std: cubic-bezier(0.4, 0, 0.2, 1);   /* standard transitions (hover, press, state changes) */
@@ -68,49 +76,48 @@
     --modal-lg-h: 820px;
     --modal-gutter: 10px;
 
-    --radius: 10px;
-    --radius-sm: 7px;
+    --radius: 20px;
+    --radius-sm: 12px;
     --tap: 34px; /* compact size for mouse; touch devices get 44px below */
 
     color-scheme: dark;
 }
 
-/* the reference look: lavender #b08df5, pink panels, ink outlines */
+/* light = the same design inverted: paper, black pills */
 :root.light-mode, .light-mode {
-    --bg: #f6f2fc;
+    --bg: #efeff1;
     --bg-image:
-        radial-gradient(900px 520px at 6% -8%, rgba(249, 228, 255, 0.95), transparent 70%),
-        radial-gradient(800px 560px at 100% 105%, rgba(176, 141, 245, 0.22), transparent 70%);
+        radial-gradient(1000px 600px at 0% -10%, rgba(255, 255, 255, 0.9), transparent 70%);
     --surface: #ffffff;
-    --surface-2: #fbf7ff;
-    --surface-3: #f9e4ff;
-    --border: #e0d3f2;
-    --border-strong: #1c2433;
-    --outline: #1c2433;
+    --surface-2: #f6f6f7;
+    --surface-3: #ebebee;
+    --border: #dcdce0;
+    --border-strong: #9a9aa3;
+    --outline: #dcdce0;
 
-    --text: #1c2433;
-    --text-muted: #5d6580;
+    --text: #141416;
+    --text-muted: #6a6a74;
 
-    --accent: #b08df5;
-    --accent-hover: #c1a3f8;
-    --accent-soft: rgba(176, 141, 245, 0.24);
-    --accent-contrast: #1c2433;   /* ink on lavender: readable (white on lavender is not) */
-    --accent-text: #6a3fcf;
+    --accent: #141416;
+    --accent-hover: #2c2c31;
+    --accent-soft: rgba(20, 20, 22, 0.08);
+    --accent-contrast: #ffffff;
+    --accent-text: #141416;
 
     --danger: #c2283a;
-    --danger-soft: rgba(194, 40, 58, 0.1);
+    --danger-soft: rgba(194, 40, 58, 0.08);
     --success: #17814f;
 
-    --shadow: 0 10px 30px rgba(60, 40, 110, 0.16);
+    --shadow: 0 18px 40px rgba(20, 20, 30, 0.14);
 
-    --btn-face: #ffffff;
-    --btn-face-hover: #f9e4ff;
-    --btn-edge: #1c2433;
-    --btn-primary-edge: #1c2433;
-    --btn-danger-face: #fff0f2;
-    --btn-danger-edge: #1c2433;
-    --checker-a: #f6f0fd;
-    --checker-b: #ebe0fa;
+    --btn-face: transparent;
+    --btn-face-hover: rgba(20, 20, 22, 0.07);
+    --btn-edge: #55555e;
+    --btn-primary-edge: transparent;
+    --btn-danger-face: rgba(194, 40, 58, 0.07);
+    --btn-danger-edge: rgba(194, 40, 58, 0.5);
+    --checker-a: #f1f1f3;
+    --checker-b: #e6e6ea;
 
     color-scheme: light;
 }
@@ -127,26 +134,23 @@ body {
 }
 
 /* ---------- Form controls ---------- */
-/* ---------- Buttons: chunky 3D ----------
-   The depth is a solid box-shadow under the button (no layout impact). Pressing moves the button
-   down with `transform` and shrinks the shadow by the same distance, so it looks like it sank
-   into the page. Only transform / box-shadow / colours are transitioned. */
+/* ---------- Buttons: flat pills ----------
+   Outlined pill by default, filled white (dark in light mode) pill for the primary action.
+   Timings and easing are the existing motion tokens; the press is a small scale instead of a sink. */
 button,
 .chip,
 #theme-toggle {
     min-height: var(--tap);
-    padding: 0 11px;
-    border: 2px solid var(--btn-edge);
-    border-radius: 10px;
+    padding: 0 16px;
+    border: 1.5px solid var(--btn-edge);
+    border-radius: 999px;
     background-color: var(--btn-face);
     color: var(--btn-text);
     font-family: var(--font-ui);
-    font-size: 0.88rem;
-    font-weight: normal;
-    letter-spacing: 0.02em;
-    box-shadow:
-        0 var(--btn-depth) 0 var(--btn-edge),
-        inset 0 2px 0 rgba(255, 255, 255, 0.14);
+    font-size: 0.86rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: none;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
@@ -168,18 +172,13 @@ button:enabled:hover,
 button:enabled:active,
 .chip:active,
 #theme-toggle:active {
-    transform: translateY(var(--btn-press));
-    box-shadow:
-        0 calc(var(--btn-depth) - var(--btn-press)) 0 var(--btn-edge),
-        inset 0 2px 0 rgba(255, 255, 255, 0.08);
+    transform: scale(0.97);
     transition-duration: 0.05s;
 }
 
 button:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
-    box-shadow: 0 2px 0 var(--btn-edge);
-    transform: translateY(2px);
 }
 
 button:focus-visible,
@@ -198,7 +197,7 @@ select {
     min-height: var(--tap);
     padding: 0 12px;
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    border-radius: 14px;
     background-color: var(--surface-2);
     color: var(--text);
 }
@@ -261,28 +260,13 @@ dialog::backdrop {
 .btn-primary,
 .modal-footer > button:first-child:not(:last-child) {
     background-color: var(--accent);
-    border-color: var(--btn-primary-edge);
+    border-color: var(--accent);
     color: var(--accent-contrast);
-    box-shadow:
-        0 var(--btn-depth) 0 var(--btn-primary-edge),
-        inset 0 2px 0 rgba(255, 255, 255, 0.28);
 }
 
 .btn-primary:enabled:hover,
 .modal-footer > button:first-child:not(:last-child):enabled:hover {
     background-color: var(--accent-hover);
-}
-
-.btn-primary:enabled:active,
-.modal-footer > button:first-child:not(:last-child):enabled:active {
-    box-shadow:
-        0 calc(var(--btn-depth) - var(--btn-press)) 0 var(--btn-primary-edge),
-        inset 0 2px 0 rgba(255, 255, 255, 0.15);
-}
-
-.btn-primary:disabled,
-.modal-footer > button:first-child:not(:last-child):disabled {
-    box-shadow: 0 2px 0 var(--btn-primary-edge);
 }
 
 /* secondary controls that should stay flat: close icons, menu entries */
@@ -312,25 +296,25 @@ button.btn-flat:enabled:active,
     background-color: var(--btn-danger-face);
     border-color: var(--btn-danger-edge);
     color: var(--danger);
-    box-shadow:
-        0 var(--btn-depth) 0 var(--btn-danger-edge),
-        inset 0 2px 0 rgba(255, 255, 255, 0.1);
 }
 
 .btn-danger:enabled:hover {
     background-color: var(--danger-soft);
 }
 
-.btn-danger:enabled:active {
-    box-shadow:
-        0 calc(var(--btn-depth) - var(--btn-press)) 0 var(--btn-danger-edge),
-        inset 0 2px 0 rgba(255, 255, 255, 0.06);
+/* type hierarchy: serif headlines, small muted sans labels, mono for XML and numbers */
+h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.25;
 }
-
-/* headings and form labels use the UI font; inputs, tables and descriptions stay readable */
-h1, h2, h3, h4, legend, .xmlview-input, .scale-field, .field > span, #character-name-control > label {
+legend, .xmlview-input, .scale-field, .field > span, #character-name-control > label {
     font-family: var(--font-ui);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.04em;
+}
+code, textarea, dialog table input, input[type="number"], .xml-mono {
+    font-family: var(--font-mono);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -345,7 +329,7 @@ h1, h2, h3, h4, legend, .xmlview-input, .scale-field, .field > span, #character-
 /* touch devices (iPad / phones): keep full-size touch targets */
 @media (pointer: coarse) {
     :root { --tap: 44px; }
-    button, .chip, #theme-toggle { font-size: 0.95rem; }
+    button, .chip, #theme-toggle { font-size: 0.92rem; }
 }
 
 

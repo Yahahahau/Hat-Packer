@@ -869,8 +869,8 @@
         gap: 6px 10px;
         padding: 6px 6px 11px;
         background-color: var(--surface);
-        border: 2px solid var(--outline);
-        border-radius: 16px;
+        border: 1px solid var(--outline);
+        border-radius: 24px;
     }
 
     .group {
@@ -1031,8 +1031,8 @@
         gap: 6px;
         padding: 6px 6px 11px;
         background-color: var(--surface);
-        border: 2px solid var(--outline);
-        border-radius: 16px;
+        border: 1px solid var(--outline);
+        border-radius: 24px;
     }
     #phone-nav button {
         display: flex; flex-direction: column; align-items: center; justify-content: center;

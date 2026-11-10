@@ -89,12 +89,10 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 6px 12px;
-		padding: 6px 10px 2px;
-		background-color: var(--surface-3);
-		border: 2px solid var(--outline);
-		border-radius: 16px;
-		box-shadow: 0 var(--btn-depth) 0 var(--outline);
-		margin-bottom: var(--btn-depth);
+		padding: 8px 12px;
+		background-color: var(--surface);
+		border: 1px solid var(--outline);
+		border-radius: 24px;
 	}
 
 	#brand {
@@ -183,7 +181,6 @@
 		gap: 8px;
 		padding: 0 12px;
 		white-space: nowrap;
-		margin-bottom: var(--btn-depth);
 	}
 
 	#theme-toggle input {

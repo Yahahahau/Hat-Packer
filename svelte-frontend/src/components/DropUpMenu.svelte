@@ -92,9 +92,9 @@
         overflow-y: auto;
         padding: 4px;
         background-color: var(--surface);
-        border: 2px solid var(--outline);
-        border-radius: 14px;
-        box-shadow: 0 4px 0 var(--outline), var(--shadow);
+        border: 1px solid var(--outline);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
     }
 
     .drop-up-menu.up { bottom: calc(100% + 8px); }

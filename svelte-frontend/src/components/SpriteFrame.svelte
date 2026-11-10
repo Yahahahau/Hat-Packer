@@ -188,10 +188,9 @@
         gap: 6px;
         min-width: 0;
         padding: 36px 6px 6px;
-        border: 2px solid var(--outline);
-        border-radius: 14px;
+        border: 1px solid var(--outline);
+        border-radius: 20px;
         background-color: var(--surface-2);
-        box-shadow: 0 3px 0 var(--outline);
         transition: transform var(--dur-hover) var(--ease-spring), box-shadow var(--dur-hover) var(--ease-std), background-color var(--dur-hover) var(--ease-std);
         cursor: pointer;
         user-select: none;
@@ -200,9 +199,9 @@
     }
 
     @media (hover: hover) {
-        .frame-container:hover { transform: translateY(-3px) rotate(-0.6deg); box-shadow: 0 6px 0 var(--outline); }
+        .frame-container:hover { transform: translateY(-3px) rotate(-0.6deg); border-color: var(--border-strong); }
     }
-    .frame-container:active { transform: translateY(2px) scale(0.985); box-shadow: 0 1px 0 var(--outline); }
+    .frame-container:active { transform: translateY(2px) scale(0.985); }
 
     .frame-container:focus-visible {
         outline: 2px solid var(--accent);
@@ -210,10 +209,10 @@
     }
 
     .frame-selected {
-        background-color: var(--accent);
-        color: var(--accent-contrast);
+        background-color: var(--surface-3);
+        border-color: var(--accent);
+        box-shadow: inset 0 0 0 1px var(--accent);
     }
-    .frame-selected .frame-name, .frame-selected .frame-size { color: var(--accent-contrast); }
 
     .frame-preview {
         flex: none;

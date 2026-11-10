@@ -152,6 +152,14 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 ### v1.6.1
 - Checkbox resting states are now plain still images from the atlas (checked = last "turn on" frame, unchecked = "turn off idle", white or black by theme). They stay until the next click; the sprite strip is only used while the transition plays.
 
+## v2.0.0 - "Monochrome Editorial" redesign
+Complete visual redesign following the dark black/white editorial reference (cards on near-black, white pill buttons, serif headlines, geometric artwork). Dark is the default; light is the same design inverted. Functionality and the existing motion system (timings, easing, open/close, hover, press, draw-on and spring animations) are unchanged.
+- **Buttons**: the 3D look is removed everywhere. Flat pills: outlined by default, filled white (black in light mode) for the primary action, red-tinted outline for delete. The press feedback is a small scale instead of a sink.
+- **Surfaces**: header, toolbars, frame grid, frame cards, menus, sheets, dialogs and the XML Inspector are rounded hairline cards; the selected frame gets a white outline.
+- **Typography**: Libre Baskerville (serif) for headlines, Inter for UI text and labels, system monospace for XML and numeric values. Fonts are bundled (SIL OFL, latin subset) in `public/fonts`; the old PhantomMuff font was removed.
+- **Artwork**: original black/white geometric composition (speckled triangle, concentric arcs, striped and dotted fields) on the Welcome screen and the empty workspace, with a single red detail like the reference.
+- Phone / tablet / desktop layouts are unchanged. Limits: checked with Playwright at desktop, tablet and phone sizes (stubbed WASM); not on real devices.
+
 ## v1.9.0 - "Lavender Desk" skin + playful motion
 New look based on the workspace-booking reference you sent: lavender `#b08df5` accents, pink panels, white cards with ink outlines. Light is now the default theme (dark = the same design on ink; the choice is remembered). Chunky 3D buttons, the two-font system, sounds and animated checkboxes are kept.
 - Header, toolbars, frame grid, sheets, menus and dialogs are outlined cards; selected frames fill with lavender (ink text, because white on lavender is hard to read).

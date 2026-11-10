@@ -75,12 +75,12 @@
 
 <style>
 	dialog {
-		border: 2px solid var(--outline);
-		border-radius: 18px;
+		border: 1px solid var(--outline);
+		border-radius: 26px;
 		padding: 0;
 		background-color: var(--surface);
 		color: var(--text);
-		box-shadow: 0 6px 0 var(--outline), var(--shadow);
+		box-shadow: var(--shadow);
 		width: min(var(--modal-w), calc(100vw - 2 * var(--modal-gutter)));
 		max-width: none;
 		max-height: calc(100dvh - 2 * var(--modal-gutter));

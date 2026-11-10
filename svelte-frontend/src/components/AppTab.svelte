@@ -57,11 +57,7 @@
     .app-tab.selected:enabled:hover,
     .app-tab.selected:enabled:active {
         background-color: var(--accent);
-        border-color: var(--btn-primary-edge);
+        border-color: var(--accent);
         color: var(--accent-contrast);
-        transform: translateY(var(--btn-press));
-        box-shadow:
-            0 calc(var(--btn-depth) - var(--btn-press)) 0 var(--btn-primary-edge),
-            inset 0 2px 0 rgba(255, 255, 255, 0.15);
     }
 </style>

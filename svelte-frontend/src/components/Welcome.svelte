@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from './Icon.svelte';
-    import DeskScene from './DeskScene.svelte';
+    import GeometryArt from './GeometryArt.svelte';
     import { APP_NAME, LOGO_URL } from '../branding';
     import { deviceChoice } from '../device';
     import type { DeviceChoice } from '../device';
@@ -16,7 +16,7 @@
 
 <div id="welcome">
     <div id="welcome-inner">
-        <div class="w-scene"><DeskScene /></div>
+        <div class="w-scene"><GeometryArt /></div>
         <header class="w-head">
             <img class="w-logo" src={LOGO_URL} alt="" width="160" height="94" draggable="false" />
             <h1>{APP_NAME}</h1>
@@ -69,7 +69,7 @@
     }
 
     .w-scene { width: min(300px, 62vw); max-height: 26vh; display: flex; justify-content: center; }
-    .w-scene :global(.desk-scene) { max-height: 26vh; }
+    .w-scene :global(.art) { max-height: 26vh; }
     .w-logo {
         width: clamp(96px, 28vw, 160px);
         height: auto;
@@ -77,7 +77,7 @@
 
     h1 {
         margin: 0;
-        font-family: var(--font-ui);
+        font-family: var(--font-serif);
         font-size: clamp(1.8rem, 6vw, 2.6rem);
         letter-spacing: 0.02em;
     }
@@ -101,7 +101,6 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: var(--gap-lg);
         width: 100%;
-        padding-bottom: var(--btn-depth);
     }
 
     .device-card {
@@ -111,7 +110,9 @@
         gap: 8px;
         min-height: 0;
         padding: 20px 14px 16px;
-        border-radius: 18px;
+        border-radius: 24px;
+        background-color: var(--surface);
+        border-color: var(--border);
         text-align: center;
         /* 'backwards' only: after the intro the normal hover / press transforms take over */
         animation: card-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
@@ -122,12 +123,10 @@
     @media (hover: hover) {
         .device-card:enabled:hover {
             transform: translateY(-4px);
-            box-shadow: 0 calc(var(--btn-depth) + 4px) 0 var(--btn-edge), inset 0 2px 0 rgba(255, 255, 255, 0.14);
         }
     }
     .device-card:enabled:active {
         transform: translateY(var(--btn-press));
-        box-shadow: 0 calc(var(--btn-depth) - var(--btn-press)) 0 var(--btn-edge), inset 0 2px 0 rgba(255, 255, 255, 0.14);
     }
 
     .dc-icon { color: var(--accent-text); display: inline-flex; }
