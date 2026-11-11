@@ -152,6 +152,11 @@ But for developers, you need the [Rust](https://www.rust-lang.org/tools/install)
 ### v1.6.1
 - Checkbox resting states are now plain still images from the atlas (checked = last "turn on" frame, unchecked = "turn off idle", white or black by theme). They stay until the next click; the sprite strip is only used while the transition plays.
 
+## v2.1.0 - Windows, preview controls, sliding mode switch
+- **Windows** (dialogs, sheets, XML Inspector, Settings, Preview) are squarer: 12 px corners and 8-10 px inner radii instead of the large page-card rounding, with tidier header / body / footer spacing and a serif title.
+- **Preview Animation**: the *Controls* panel now animates open and closed (height, fade and a small rise) and the preview stage resizes together with it, so the picture always uses the space that is left. Closed panels are hidden from keyboard / screen readers.
+- **Mode switch** (Spritesheet / Icongrid) is a pill switch like the reference buttons: the white highlight slides and resizes smoothly to the other mode (about 0.4 s), follows window resizes and font loading, and is not animated with *reduce motion*.
+
 ## v2.0.0 - "Monochrome Editorial" redesign
 Complete visual redesign following the dark black/white editorial reference (cards on near-black, white pill buttons, serif headlines, geometric artwork). Dark is the default; light is the same design inverted. Functionality and the existing motion system (timings, easing, open/close, hover, press, draw-on and spring animations) are unchanged.
 - **Buttons**: the 3D look is removed everywhere. Flat pills: outlined by default, filled white (black in light mode) for the primary action, red-tinted outline for delete. The press feedback is a small scale instead of a sink.

@@ -52,12 +52,20 @@
         .t-short { display: inline; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
     }
 
-    /* the active mode is the accent button that stays pressed in */
+    /* the highlight is the sliding pill (#tab-indicator in App.svelte); the tab itself only changes its text colour */
+    .app-tab {
+        position: relative;
+        z-index: 1;
+        background-color: transparent;
+        border-color: transparent;
+        color: var(--text-muted);
+        transition: color 380ms cubic-bezier(0.65, 0, 0.35, 1), background-color var(--dur-hover) var(--ease-std), transform var(--dur-press) var(--ease-std);
+    }
+    .app-tab:enabled:hover { background-color: transparent; color: var(--text); }
     .app-tab.selected,
-    .app-tab.selected:enabled:hover,
-    .app-tab.selected:enabled:active {
-        background-color: var(--accent);
-        border-color: var(--accent);
+    .app-tab.selected:enabled:hover {
+        background-color: transparent;
+        border-color: transparent;
         color: var(--accent-contrast);
     }
 </style>

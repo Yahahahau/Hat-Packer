@@ -16,6 +16,33 @@
 	let curChoice = "spsh";
 	let darkMode = getTheme() === 'dark';
 
+	// sliding highlight behind the mode tabs: measured from the selected tab and tweened to the next one
+	function tabIndicator(node: HTMLElement, _choice: string)
+	{
+		function measure()
+		{
+			const el = node.querySelector<HTMLElement>('.app-tab.selected');
+			if(!el) return;
+			node.style.setProperty('--ind-x', el.offsetLeft + 'px');
+			node.style.setProperty('--ind-w', el.offsetWidth + 'px');
+		}
+		measure();
+		// no tween for the very first placement
+		requestAnimationFrame(() => requestAnimationFrame(() => node.classList.add('ind-ready')));
+		let ro: ResizeObserver | null = null;
+		if(typeof ResizeObserver !== 'undefined')
+		{
+			ro = new ResizeObserver(measure);
+			ro.observe(node);
+			node.querySelectorAll('.app-tab').forEach((t) => ro.observe(t));
+		}
+		if(document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+		return {
+			update() { requestAnimationFrame(measure); },
+			destroy() { if(ro) ro.disconnect(); }
+		};
+	}
+
 	function toggleTheme()
 	{
 		applyTheme(darkMode ? 'dark' : 'light');
@@ -37,7 +64,8 @@
 			</div>
 		</div>
 
-		<div id="app-tabs" role="tablist" aria-label="Mode">
+		<div id="app-tabs" role="tablist" aria-label="Mode" use:tabIndicator={curChoice}>
+			<span id="tab-indicator" aria-hidden="true"></span>
 			<AppTab id="spsh" icon="sheet" bind:curChoice={curChoice} text="Spritesheet Generation" shortText="Spritesheet" />
 			<AppTab id="icongrid" icon="grid" bind:curChoice={curChoice} text="Icongrid Generation" shortText="Icongrid" />
 		</div>
@@ -139,11 +167,34 @@
 	}
 
 	#app-tabs {
+		position: relative;
 		display: flex;
-		gap: 10px;
-		padding: 0 0 var(--btn-depth);
+		gap: 0;
+		padding: 4px;
+		background-color: var(--surface-2);
+		border: 1px solid var(--border);
+		border-radius: 999px;
 		flex: 0 1 auto;
 		max-width: 520px;
+	}
+
+	#tab-indicator {
+		position: absolute;
+		top: 4px;
+		bottom: 4px;
+		left: 0;
+		width: var(--ind-w, 0px);
+		transform: translateX(var(--ind-x, 0px));
+		border-radius: 999px;
+		background-color: var(--accent);
+		pointer-events: none;
+	}
+	/* smooth slide to the other tab (position and width tween together) */
+	:global(#app-tabs.ind-ready) #tab-indicator {
+		transition: transform 420ms cubic-bezier(0.65, 0, 0.35, 1), width 420ms cubic-bezier(0.65, 0, 0.35, 1);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		:global(#app-tabs.ind-ready) #tab-indicator { transition: none; }
 	}
 
 	#header-tools {

@@ -76,7 +76,9 @@
 <style>
 	dialog {
 		border: 1px solid var(--outline);
-		border-radius: 26px;
+		border-radius: 12px;
+		--radius: 10px;
+		--radius-sm: 8px;
 		padding: 0;
 		background-color: var(--surface);
 		color: var(--text);
@@ -108,13 +110,14 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 12px;
-		padding: 4px 4px 4px 14px;
+		padding: 6px 8px 6px 18px;
 		border-bottom: 1px solid var(--border);
 		flex: none;
 	}
 	.modal-title {
-		font-size: 0.98rem;
-		font-weight: 600;
+		font-family: var(--font-serif);
+		font-size: 1.02rem;
+		font-weight: 700;
 		min-width: 0;
 	}
 	.modal-title :global(h2),
@@ -140,7 +143,7 @@
 		overflow: auto;
 		overscroll-behavior: contain;
 		-webkit-overflow-scrolling: touch;
-		padding: 12px 14px;
+		padding: 16px 18px;
 	}
 	dialog.lg .modal-body {
 		display: flex;
@@ -151,7 +154,7 @@
 		flex-wrap: wrap;
 		justify-content: flex-end;
 		gap: 8px;
-		padding: 8px 14px 10px;
+		padding: 12px 18px 14px;
 		border-top: 1px solid var(--border);
 		flex: none;
 	}
@@ -196,7 +199,7 @@
 		width: 100vw;
 		margin: auto 0 0;
 		max-height: 88dvh;
-		border-radius: 16px 16px 0 0;
+		border-radius: 14px 14px 0 0;
 		border-bottom: 0;
 		animation-name: sheet-in;
 		animation-duration: 420ms;

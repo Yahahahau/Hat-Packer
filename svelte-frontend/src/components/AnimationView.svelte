@@ -214,7 +214,8 @@
             </button>
         </div>
 
-        <div id="anim-controls" class="anim-view-container" hidden={!$controlsOpen}>
+        <div class="ctl-wrap" class:open={$controlsOpen} aria-hidden={!$controlsOpen}>
+        <div id="anim-controls" class="anim-view-container">
             <label class="field grow" for="anim-prefix">
                 <span>Animation Prefix</span>
                 <select on:change={()=> { loadPrefix(selectedOption); }} name="anim-prefix" id="anim-prefix" bind:value={selectedOption}>
@@ -234,6 +235,7 @@
                 </label>
                 <button type="button" on:click={fitScale}>Fit</button>
             {/if}
+        </div>
         </div>
     </div>
 </Modal>
@@ -332,5 +334,35 @@
     .transport .play-btn { flex: 0 0 auto; min-width: 110px; justify-content: center; }
     .pos { color: var(--text-muted); font-size: 0.85rem; white-space: nowrap; }
     .ctl-toggle { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; }
-    .anim-view-container[hidden] { display: none; }
+    /* controls slide open / closed (height, fade and a small rise); the stage above grows / shrinks with it */
+    .ctl-wrap {
+        flex: none;
+        display: grid;
+        grid-template-rows: 0fr;
+        margin-top: -12px;            /* cancels the layout gap while collapsed */
+        opacity: 0;
+        transform: translateY(10px);
+        visibility: hidden;
+        transition:
+            grid-template-rows 320ms cubic-bezier(0.65, 0, 0.35, 1),
+            margin-top 320ms cubic-bezier(0.65, 0, 0.35, 1),
+            opacity 240ms var(--ease-std),
+            transform 320ms cubic-bezier(0.65, 0, 0.35, 1),
+            visibility 0s linear 320ms;
+    }
+    .ctl-wrap.open {
+        grid-template-rows: 1fr;
+        margin-top: 0;
+        opacity: 1;
+        transform: none;
+        visibility: visible;
+        transition:
+            grid-template-rows 320ms cubic-bezier(0.65, 0, 0.35, 1),
+            margin-top 320ms cubic-bezier(0.65, 0, 0.35, 1),
+            opacity 280ms var(--ease-std) 40ms,
+            transform 320ms cubic-bezier(0.65, 0, 0.35, 1),
+            visibility 0s;
+    }
+    .ctl-wrap > .anim-view-container { min-height: 0; overflow: hidden; padding: 2px; }
+    @media (prefers-reduced-motion: reduce) { .ctl-wrap, .ctl-wrap.open { transition: none; } }
 </style>

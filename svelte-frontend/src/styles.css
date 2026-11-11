@@ -197,7 +197,7 @@ select {
     min-height: var(--tap);
     padding: 0 12px;
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-sm);
     background-color: var(--surface-2);
     color: var(--text);
 }
@@ -249,8 +249,11 @@ code {
 }
 
 /* ---------- Shared bits ---------- */
+/* windows are squarer than the page cards: smaller radii for everything inside a dialog */
 dialog {
     color: var(--text);
+    --radius: 10px;
+    --radius-sm: 8px;
 }
 
 dialog::backdrop {
@@ -508,21 +511,7 @@ html[data-layout="desktop"], html[data-layout="tablet"] { font-size: 15px; }
     #brand-logo { animation: hp-logo-hop 0.7s var(--ease-spring) 0.4s backwards; transform-origin: 50% 100%; }
     #brand-logo:hover, #brand-logo:active { animation: hp-logo-hop 0.7s var(--ease-spring); }
 
-    /* the selected mode gets a hand-drawn underline that is drawn on when it is chosen */
-    .app-tab { position: relative; }
-    .app-tab.selected::after {
-        content: "";
-        position: absolute;
-        left: 14%; right: 14%; bottom: 1px; height: 5px;
-        background: currentColor;
-        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='6' viewBox='0 0 16 6'%3E%3Cpath d='M0 3c2-3 4-3 6 0s4 3 6 0 3-2 4-1' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center / 16px 6px;
-        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='6' viewBox='0 0 16 6'%3E%3Cpath d='M0 3c2-3 4-3 6 0s4 3 6 0 3-2 4-1' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center / 16px 6px;
-        animation: hp-reveal 0.55s var(--ease-in) backwards;
-        pointer-events: none;
-    }
     .strip-item.on { animation: hp-hop 0.5s var(--ease-spring); }
     #empty-state { animation: hp-card-pop 0.6s var(--ease-spring) backwards; }
     .toast-spring, #status-line { animation: hp-card-pop 0.45s var(--ease-spring) backwards; }
 }
-/* the squiggle must not eat the label of a tab that is short on room */
-.app-tab.selected { padding-top: 0; padding-bottom: 8px; }
